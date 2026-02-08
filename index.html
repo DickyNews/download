@@ -47,25 +47,25 @@
             display: inline-flex;
             align-items: center;
             background: #111;
-            padding: 8px 20px;
+            padding: 8px 25px;
             border-radius: 50px;
-            border: 1px solid rgba(255, 204, 0, 0.3);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            gap: 12px;
+            border: 2px solid var(--yellow);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+            gap: 15px;
         }
         .label {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 800;
-            color: #888;
+            color: var(--yellow);
             letter-spacing: 1px;
             text-transform: uppercase;
         }
         .count-value {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
-            color: var(--yellow);
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
         }
 
         /* Daftar Download */
@@ -125,8 +125,8 @@
 
     <div class="counter-container">
         <div class="modern-badge">
-            <span class="label">TOTAL VISITORS</span>
-            <span class="count-value" id="count">2654877</span>
+            <span class="label">TOTAL VISITORS :</span>
+            <span class="count-value" id="count">2.654.844</span>
         </div>
     </div>
 
@@ -147,6 +147,8 @@
     <span class="section-title">Video Cara Download & Install :</span>
     <p>> <a href="https://youtu.be/bGQPvEVCmfo" class="yellow-link">youtu.be/bGQPvEVCmfo</a></p>
 
+    <hr class="divider">
+
     <span class="section-title">Tata Cara Instal :</span>
     <p>✅ Matikan Play Protect di Play Store</p>
     <p>✅ Wajib Punya WA ORI</p>
@@ -156,19 +158,21 @@
     <p>📌 Pemasangan Paling Aman Adalah Lewat Tautan Perangkat, Tautkan WA GB Ke WA ORI.</p>
     <p>📌 Jika Kalian Login Nomor Langsung di WA GB, Resiko Banned Silahkan Tanggung Sendiri.</p>
 
+    <hr class="divider">
+
     <span class="section-title">WA MOD ENHANCER (ROOT) :</span>
     <p>✅ Atasi Memerlukan WA Resmi | 100% Permanen Bisa Login Nomor</p>
     <p>> <a href="https://youtu.be/Ki8uA7weZFA" class="yellow-link">LINK WA ENHANCER</a></p>
 
     <footer>
-        Privasi & Cookie: Situs ini menggunakan cookie. Dengan melanjutkan, Anda setuju dengan penggunaan mereka.
+        Privasi & Cookie: Situs ini menggunakan cookie. Dengan melanjutkan menggunakan situs web ini, Anda setuju dengan penggunaan mereka.
     </footer>
 </div>
 
 <script>
-    // Sistem Counter Pintar: Bertambah setiap refresh, mulai dari 156.254
-    let baseCount = 156254;
-    let visits = localStorage.getItem('site_visits');
+    // Sistem Counter Pintar: Mulai dari 2.654.844
+    let baseCount = 2654844;
+    let visits = localStorage.getItem('site_visits_new');
     
     if (visits === null) {
         visits = 1;
@@ -176,7 +180,8 @@
         visits = parseInt(visits) + 1;
     }
     
-    localStorage.setItem('site_visits', visits);
+    localStorage.setItem('site_visits_new', visits);
+    // Tampilan angka format Indonesia (dengan titik)
     document.getElementById('count').innerText = (baseCount + visits).toLocaleString('id-ID');
 </script>
 
