@@ -42,24 +42,28 @@
             text-align: center;
             font-weight: bold;
             color: var(--yellow);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: block;
             letter-spacing: 1px;
         }
-        /* Widget Visitor Style */
+        /* Style Visitor Counter Baru */
         .visitor-counter {
             text-align: center;
             margin-bottom: 50px;
         }
-        .visitor-counter img {
-            filter: drop-shadow(0 0 8px var(--yellow));
-            height: 35px;
+        .counter-img {
+            background: #222;
+            padding: 5px 15px;
+            border-radius: 5px;
+            border: 1px solid var(--yellow);
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
         }
         .visitor-label {
             font-size: 11px;
             color: var(--yellow);
             font-weight: bold;
-            margin-top: 5px;
+            margin-top: 8px;
             text-transform: uppercase;
         }
         /* Daftar Download */
@@ -127,7 +131,9 @@
     <span class="sub-tag">Dicky News : 400K SUBSCRIBERS</span>
 
     <div class="visitor-counter">
-        <img src="https://profile-counter.glitch.me/dickynews/count.svg?start=156254" alt="Visitor Counter">
+        <div class="counter-img">
+            <img src="https://counter.secrethit.com/get/@dickynews?theme=odometer&next=156254" alt="Visitor Counter" style="height: 30px; vertical-align: middle;">
+        </div>
         <div class="visitor-label">LIVE TOTAL VISITORS</div>
     </div>
 
