@@ -10,7 +10,6 @@
             --card: #151518;
             --yellow: #ffcc00;
             --text: #e2e8f0;
-            --dim-text: #94a3b8;
         }
         body {
             font-family: 'Segoe UI', Roboto, sans-serif;
@@ -33,7 +32,7 @@
             letter-spacing: 2px;
         }
         h1 {
-            font-size: 52px;
+            font-size: 48px;
             font-weight: 800;
             text-align: center;
             margin-bottom: 10px;
@@ -43,9 +42,25 @@
             text-align: center;
             font-weight: bold;
             color: var(--yellow);
-            margin-bottom: 60px;
+            margin-bottom: 20px;
             display: block;
             letter-spacing: 1px;
+        }
+        /* Widget Visitor Style */
+        .visitor-counter {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .visitor-counter img {
+            filter: drop-shadow(0 0 8px var(--yellow));
+            height: 35px;
+        }
+        .visitor-label {
+            font-size: 11px;
+            color: var(--yellow);
+            font-weight: bold;
+            margin-top: 5px;
+            text-transform: uppercase;
         }
         /* Daftar Download */
         .download-box {
@@ -67,6 +82,7 @@
             border-radius: 6px;
             text-decoration: none;
             font-weight: 800;
+            text-transform: uppercase;
         }
         .divider {
             border: 0;
@@ -78,13 +94,13 @@
             background: rgba(255, 204, 0, 0.03);
             padding: 30px;
             border-radius: 12px;
-            border: 1px dashed #333;
+            border: 1px dashed #444;
             margin: 30px 0;
         }
         .section-title {
             color: var(--yellow);
             font-weight: 800;
-            font-size: 22px;
+            font-size: 20px;
             text-decoration: underline;
             margin-top: 50px;
             margin-bottom: 20px;
@@ -92,14 +108,11 @@
             text-transform: uppercase;
         }
         .yellow-link { color: var(--yellow); text-decoration: none; font-weight: bold; }
-        .yellow-link:hover { text-decoration: underline; }
-        
-        /* Footer ala WordPress */
         footer {
-            margin-top: 120px;
+            margin-top: 100px;
             padding: 40px 0;
             border-top: 1px solid #222;
-            font-size: 14px;
+            font-size: 13px;
             color: #555;
             text-align: center;
         }
@@ -113,25 +126,30 @@
     <h1>Dicky News Official</h1>
     <span class="sub-tag">Dicky News : 400K SUBSCRIBERS</span>
 
+    <div class="visitor-counter">
+        <img src="https://profile-counter.glitch.me/dickynews/count.svg?start=156254" alt="Visitor Counter">
+        <div class="visitor-label">LIVE TOTAL VISITORS</div>
+    </div>
+
     <div class="download-box">
         <span>GB W4 Pro V25.75</span>
-        <a href="LINK_GENERATOR_SINI">DOWNLOAD</a>
+        <a href="#">DOWNLOAD</a>
     </div>
     <div class="download-box">
         <span>MB W4 V2.6.0</span>
-        <a href="LINK_GENERATOR_SINI">DOWNLOAD</a>
+        <a href="#">DOWNLOAD</a>
     </div>
     <div class="download-box">
         <span>RC W4 V10.60</span>
-        <a href="LINK_GENERATOR_SINI">DOWNLOAD</a>
+        <a href="#">DOWNLOAD</a>
     </div>
     <div class="download-box">
         <span>Delta W4 V3.4.2</span>
-        <a href="LINK_GENERATOR_SINI">DOWNLOAD</a>
+        <a href="#">DOWNLOAD</a>
     </div>
     <div class="download-box">
         <span>Lite X W4 V2.70.1</span>
-        <a href="LINK_GENERATOR_SINI">DOWNLOAD</a>
+        <a href="#">DOWNLOAD</a>
     </div>
 
     <hr class="divider">
@@ -170,7 +188,7 @@
     <p>> <a href="https://youtu.be/Ki8uA7weZFA" class="yellow-link">https://youtu.be/Ki8uA7weZFA</a></p>
 
     <footer>
-        Privasi & Cookie: Situs ini menggunakan cookie. Dengan melanjutkan menggunakan situs web ini, Anda setuju dengan penggunaan mereka. Untuk mengetahui lebih lanjut, termasuk cara mengontrol cookie, lihat di sini: Kebijakan Cookie
+        Privasi & Cookie: Situs ini menggunakan cookie. Dengan melanjutkan menggunakan situs web ini, Anda setuju dengan penggunaan mereka.
     </footer>
 </div>
 
