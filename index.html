@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dicky News Official | Hub Premium</title>
+    <title>Dicky News Official</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <style>
@@ -14,11 +14,13 @@
             --yellow-glow: rgba(255, 204, 0, 0.4);
             --text: #e2e8f0;
             --accent: #1e1e22;
+            --cursor-color: #ffcc00;
         }
 
         * {
             box-sizing: border-box;
             scroll-behavior: smooth;
+            cursor: none; /* Custom cursor */
         }
 
         body {
@@ -30,12 +32,26 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background */
+        /* Custom Cursor */
+        #cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--cursor-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        /* Interactive Background Glow */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -20%, #332b00 0%, transparent 50%);
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 204, 0, 0.15) 0%, transparent 50%);
             z-index: -1;
+            pointer-events: none;
         }
 
         .wrapper {
@@ -48,29 +64,32 @@
         header {
             text-align: center;
             margin-bottom: 60px;
+            perspective: 1000px;
         }
 
         h1 {
-            font-size: clamp(40px, 8vw, 64px);
+            font-size: clamp(32px, 7vw, 56px);
             font-weight: 900;
             margin: 0;
             background: linear-gradient(to bottom, #fff, var(--yellow));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -2px;
+            letter-spacing: -1px;
+            transform-style: preserve-3d;
         }
 
         .sub-tag {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: var(--yellow);
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             text-transform: uppercase;
             display: block;
             margin-top: 10px;
+            opacity: 0.8;
         }
 
-        /* Visitor Counter */
+        /* Balanced Visitor Counter */
         .counter-container {
             display: flex;
             justify-content: center;
@@ -79,29 +98,37 @@
 
         .modern-badge {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            padding: 12px 30px;
+            backdrop-filter: blur(12px);
+            padding: 10px 25px;
             border-radius: 100px;
-            border: 1px solid rgba(255, 204, 0, 0.3);
+            border: 1px solid rgba(255, 204, 0, 0.2);
             display: flex;
             align-items: center;
-            gap: 15px;
-            transition: 0.4s;
+            gap: 12px;
+            transition: all 0.4s ease;
         }
 
         .modern-badge:hover {
             border-color: var(--yellow);
-            box-shadow: 0 0 25px var(--yellow-glow);
+            box-shadow: 0 0 30px var(--yellow-glow);
+            transform: translateY(-3px);
+        }
+
+        .count-label {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--yellow);
+            text-transform: uppercase;
         }
 
         .count-value {
             font-family: 'Monaco', monospace;
-            font-size: 20px;
+            font-size: 16px; /* Menjadi selaras dengan label */
             font-weight: bold;
             color: #fff;
         }
 
-        /* Download Section */
+        /* Download Section with Tilt Effect */
         .download-list {
             display: grid;
             gap: 15px;
@@ -115,18 +142,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .download-box:hover {
-            transform: scale(1.02);
             background: #1a1a1d;
             border-color: var(--yellow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .download-box span {
             font-weight: 600;
             font-size: 18px;
+            z-index: 1;
         }
 
         .btn-download {
@@ -141,20 +171,21 @@
             align-items: center;
             gap: 8px;
             transition: 0.3s;
-        }
-
-        .btn-download:hover {
-            box-shadow: 0 5px 15px var(--yellow-glow);
-            transform: translateY(-2px);
+            z-index: 1;
         }
 
         /* Info Panels */
         .info-card {
-            background: rgba(255, 204, 0, 0.02);
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid #222;
             padding: 25px;
             border-radius: 20px;
             margin: 40px 0;
+            transition: 0.4s;
+        }
+
+        .info-card:hover {
+            border-color: rgba(255, 204, 0, 0.5);
         }
 
         .section-title {
@@ -174,116 +205,112 @@
             transition: 0.3s;
         }
 
-        .yellow-link:hover { border-bottom-style: solid; }
-
-        /* Social Media Section */
-        .social-container {
-            text-align: center;
-            margin-top: 60px;
-            padding: 40px 0;
-        }
-
+        /* Social Media - Magnetic Style */
         .social-grid {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
             margin-top: 25px;
         }
 
         .social-icon {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             background: var(--accent);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
+            border-radius: 15px;
             text-decoration: none;
-            font-size: 20px;
-            transition: 0.4s;
+            font-size: 22px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid #333;
         }
 
         .social-icon:hover {
-            transform: translateY(-10px);
             background: var(--yellow);
             color: #000;
-            border-color: var(--yellow);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transform: scale(1.2) rotate(8deg);
+            box-shadow: 0 10px 25px var(--yellow-glow);
+        }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #333, transparent);
+            margin: 60px 0;
         }
 
         footer {
             margin-top: 80px;
             padding: 40px 20px;
             font-size: 12px;
-            color: #444;
+            color: #666;
             text-align: center;
             border-top: 1px solid #111;
         }
 
-        .divider {
-            border: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #222, transparent);
-            margin: 60px 0;
-        }
-
+        /* Responsive */
         @media (max-width: 600px) {
             .download-box { flex-direction: column; text-align: center; gap: 15px; }
             .btn-download { width: 100%; justify-content: center; }
+            .mobile-stack { grid-template-columns: 1fr !important; }
+            * { cursor: auto !important; }
+            #cursor { display: none; }
         }
     </style>
 </head>
 <body>
 
+<div id="cursor"></div>
 <div class="bg-glow"></div>
 
 <div class="wrapper">
-    <header data-aos="zoom-out">
-        <h1>Dicky News</h1>
+    <header data-aos="zoom-out-down">
+        <h1>Dicky News Official</h1>
         <span class="sub-tag">400K SUBSCRIBERS ENTHUSIAST</span>
     </header>
 
-    <div class="counter-container" data-aos="fade-up">
+    <div class="counter-container" data-aos="fade-up" data-aos-duration="1000">
         <div class="modern-badge">
-            <span style="font-size: 12px; font-weight: 800; color: var(--yellow)">TOTAL VISITORS</span>
+            <span class="count-label">TOTAL VISITORS</span>
             <span class="count-value" id="count">0</span>
         </div>
     </div>
 
     <div class="download-list">
-        <div class="download-box" data-aos="fade-right" data-aos-delay="100">
+        <div class="download-box" data-aos="fade-up" data-aos-delay="100">
             <span>GB W4 Pro Terbaru</span>
             <a href="#" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
-        <div class="download-box" data-aos="fade-right" data-aos-delay="200">
+        <div class="download-box" data-aos="fade-up" data-aos-delay="200">
             <span>MB W4 Terbaru</span>
             <a href="#" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
-        <div class="download-box" data-aos="fade-right" data-aos-delay="300">
+        <div class="download-box" data-aos="fade-up" data-aos-delay="300">
             <span>RC W4 Terbaru</span>
             <a href="#" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
-        <div class="download-box" data-aos="fade-right" data-aos-delay="400">
+        <div class="download-box" data-aos="fade-up" data-aos-delay="400">
             <span>Delta W4 Terbaru</span>
             <a href="#" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
-        <div class="download-box" data-aos="fade-right" data-aos-delay="500">
+        <div class="download-box" data-aos="fade-up" data-aos-delay="500">
             <span>Lite X W4 Terbaru</span>
             <a href="#" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
     </div>
 
-    <div class="info-card" data-aos="fade-up">
+    <div class="info-card" data-aos="zoom-in" data-aos-anchor-placement="center-bottom">
         <p><i class="fas fa-check-circle" style="color: var(--yellow)"></i> Tidak Perlu Aktivator.</p>
         <p><i class="fas fa-archive" style="color: var(--yellow)"></i> Ekstrak File menggunakan <a href="#" class="yellow-link">Zarchiver</a>.</p>
         <p><i class="fas fa-forward" style="color: var(--yellow)"></i> Skip Jika Sudah Punya Versi Yang Sama.</p>
     </div>
 
-    <div class="section-title" data-aos="fade-left"><i class="fab fa-youtube"></i> Tutorial Instalasi</div>
-    <div class="download-box" data-aos="zoom-in" style="background: #1a1a1d;">
+    <div class="section-title" data-aos="fade-right"><i class="fab fa-youtube"></i> Tutorial Instalasi</div>
+    <div class="download-box" data-aos="flip-up" style="background: #1a1a1d;">
         <span>Video Cara Download & Install</span>
         <a href="https://youtu.be/bGQPvEVCmfo" class="btn-download" style="background: #ff0000; color: #fff;"><i class="fab fa-youtube"></i> TONTON</a>
     </div>
@@ -291,29 +318,27 @@
     <hr class="divider">
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;" class="mobile-stack">
-        <div data-aos="fade-up">
+        <div data-aos="fade-right" data-aos-offset="200">
             <span class="section-title">Tata Cara :</span>
             <p><i class="fas fa-shield-alt"></i> Matikan Play Protect</p>
             <p><i class="fas fa-check"></i> Wajib Punya W4 ORI</p>
             <p><i class="fas fa-link"></i> Tautkan WA GB ke W4 ORI</p>
         </div>
-        <div data-aos="fade-up" data-aos-delay="100">
+        <div data-aos="fade-left" data-aos-offset="200">
             <span class="section-title">Penting :</span>
             <p>⚠️ Paling Aman Lewat Tautan Perangkat.</p>
             <p>⚠️ Login Nomor Langsung = Resiko Banned.</p>
         </div>
     </div>
 
-    <hr class="divider">
-
-    <div class="info-card" data-aos="flip-up" style="border-left: 4px solid #ff0000;">
+    <div class="info-card" data-aos="zoom-out" style="border-left: 4px solid #ff0000; margin-top: 60px;">
         <span class="section-title" style="color: #ff4444;"><i class="fas fa-bolt"></i> WA MOD ENHANCER (ROOT)</span>
         <p>Atasi Memerlukan W4 Resmi | 100% Permanen Bisa Login Nomor</p>
         <a href="https://youtu.be/Ki8uA7weZFA" class="yellow-link">KLIK DISINI UNTUK DETAIL</a>
     </div>
 
     <div class="social-container" data-aos="fade-up">
-        <span class="section-title" style="justify-content: center;">CONNECT WITH ME</span>
+        <span class="section-title" style="justify-content: center; margin-top: 40px;">CONNECT WITH ME</span>
         <div class="social-grid">
             <a href="https://youtube.com/@dickynews" class="social-icon" title="YouTube Utama"><i class="fab fa-youtube"></i></a>
             <a href="https://youtube.com/@dickynewsofficial" class="social-icon" title="YouTube Kedua"><i class="fab fa-youtube-square"></i></a>
@@ -325,46 +350,85 @@
 
     <footer>
         <p>&copy; 2024 Dicky News Official. All Rights Reserved.</p>
-        <p>Privasi & Cookie: Situs ini menggunakan cookie untuk meningkatkan pengalaman pengguna.</p>
+        <p>Privasi & Cookie: Situs ini menggunakan cookie untuk meningkatkan interaktivitas visual.</p>
     </footer>
 </div>
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
-    // Initialize Animations
+    // Initialize Animations with Scroll Handling
     AOS.init({
-        duration: 800,
-        easing: 'ease-out-back',
-        once: true
+        duration: 1000,
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        once: false, // Animasi terulang saat scroll up/down
+        mirror: true
     });
 
-    // Counter System
+    // Custom Cursor & Glow Follower
+    const cursor = document.getElementById('cursor');
+    const root = document.documentElement;
+
+    document.addEventListener('mousemove', (e) => {
+        // Move Custom Cursor
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        // Update Glow Position
+        const x = (e.clientX / window.innerWidth) * 100;
+        const y = (e.clientY / window.innerHeight) * 100;
+        root.style.setProperty('--mouse-x', `${x}%`);
+        root.style.setProperty('--mouse-y', `${y}%`);
+    });
+
+    // Cursor interaction on hover
+    document.querySelectorAll('a, .download-box').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.style.transform = 'scale(3)';
+            cursor.style.background = 'rgba(255, 204, 0, 0.3)';
+        });
+        el.addEventListener('mouseleave', () => {
+            cursor.style.transform = 'scale(1)';
+            cursor.style.background = 'var(--cursor-color)';
+        });
+    });
+
+    // Balanced Counter System
     let baseCount = 2654844;
-    let visits = localStorage.getItem('site_visits_new');
-    
-    if (visits === null) {
-        visits = 1;
-    } else {
-        visits = parseInt(visits) + 1;
-    }
-    
+    let visits = localStorage.getItem('site_visits_new') || 0;
+    visits = parseInt(visits) + 1;
     localStorage.setItem('site_visits_new', visits);
     
-    // Animate Counter Number
     const target = baseCount + visits;
     const countEl = document.getElementById('count');
-    let current = target - 100; // Start slightly below for effect
+    let current = target - 150; 
     
     const updateCount = () => {
         if(current < target) {
-            current += 1;
+            current += Math.ceil((target - current) / 10);
             countEl.innerText = current.toLocaleString('id-ID');
-            setTimeout(updateCount, 10);
+            requestAnimationFrame(updateCount);
         } else {
             countEl.innerText = target.toLocaleString('id-ID');
         }
     };
     updateCount();
+
+    // Subtle 3D Tilt Effect for Boxes
+    document.querySelectorAll('.download-box').forEach(box => {
+        box.addEventListener('mousemove', (e) => {
+            const rect = box.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const xc = rect.width / 2;
+            const yc = rect.height / 2;
+            const dx = x - xc;
+            const dy = y - yc;
+            box.style.transform = `perspective(1000px) rotateX(${-dy/20}deg) rotateY(${dx/20}deg) scale(1.03)`;
+        });
+        box.addEventListener('mouseleave', () => {
+            box.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+        });
+    });
 </script>
 
 </body>
