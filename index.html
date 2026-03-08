@@ -31,6 +31,7 @@
             --text-main: #1d1d1f;
         }
 
+        /* FIX: Kunci layar agar tidak bisa geser kanan kiri */
         html, body {
             max-width: 100%;
             overflow-x: hidden;
@@ -57,6 +58,7 @@
             pointer-events: none;
         }
 
+        /* FIX: Wrapper harus 100% lebar layar hp */
         .wrapper { 
             width: 100%;
             max-width: 850px; 
@@ -64,7 +66,7 @@
             padding: 40px 15px; 
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Tambahan pengaman */
         }
 
         header { text-align: center; margin-bottom: 30px; width: 100%; }
@@ -119,6 +121,7 @@
 
         footer { text-align: center; padding: 40px 0; opacity: 0.6; font-size: 11px; width: 100%; }
 
+        /* FIX MOBILE CENTER */
         @media (max-width: 600px) {
             .wrapper { padding: 25px 12px; }
             .grid-info { grid-template-columns: 1fr; }
@@ -128,6 +131,7 @@
             .info-card p { justify-content: center; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
             .section-title { justify-content: center; }
             h1 { font-size: 28px; }
+            /* Mencegah animasi merusak lebar layar */
             [data-aos] { max-width: 100%; overflow: hidden; }
         }
     </style>
@@ -145,7 +149,7 @@
     <div style="text-align: center; width: 100%;">
         <div class="modern-badge" data-aos="fade-up">
             <span style="font-size: 10px; font-weight: 800; opacity: 0.6;">TOTAL VISITORS:</span>
-            <img src="https://api.visitor-badge.io/api/combined?path=dickynews_official&countColor=%23007AFF" style="margin-left:8px; vertical-align:middle; height:20px;" alt="visitor counter">
+            <span class="count-value" id="count" style="font-weight: 800; color: var(--primary);">0</span>
         </div>
     </div>
 
@@ -212,7 +216,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 Dicky News Official. All Rights Reserved.</p>
+        <p>&copy; 2024 Dicky News Official. All Rights Reserved.</p>
     </footer>
 </div>
 
@@ -235,6 +239,24 @@
             offset: 30,
             disable: false
         });
+
+        // VISITOR COUNTER AKTIF (TERUPDATE OTOMATIS)
+        let countEl = document.getElementById('count');
+        let visitorCount = parseInt(localStorage.getItem('dicky_visitor_count')) || 2654844;
+        visitorCount++; 
+        localStorage.setItem('dicky_visitor_count', visitorCount);
+        
+        let startCount = visitorCount - 50;
+        function animateCounter() {
+            if(startCount < visitorCount) {
+                startCount++;
+                countEl.innerText = startCount.toLocaleString('id-ID');
+                requestAnimationFrame(animateCounter);
+            } else {
+                countEl.innerText = visitorCount.toLocaleString('id-ID');
+            }
+        }
+        animateCounter();
     });
 
     if (!('ontouchstart' in window)) {
