@@ -228,7 +228,7 @@
         const applyLink = (id, originalUrl) => {
             const el = document.getElementById(id);
             if (el) {
-                // Jika datang dari Web 3 bawa sinyal bypass/task, teruskan ke Web 2
+                // PENYEMPURNAAN: Jika ada method bypass, tempelkan ke link download (Web 2)
                 el.href = method ? `${originalUrl}&method=${method}` : originalUrl;
             }
         };
@@ -239,7 +239,7 @@
         applyLink('link-delta', LINK_SETTINGS.delta_WA);
         applyLink('link-litex', LINK_SETTINGS.lite_x_WA);
         
-        // Link tutorial dan info lain tidak perlu bypass
+        // Link tutorial dan info lain tidak perlu bypass (tetap normal)
         document.getElementById('link-tutorial').href = LINK_SETTINGS.video_tutorial;
         document.getElementById('link-zarchiver').href = LINK_SETTINGS.zarchiver;
         document.getElementById('link-wa-root').href = LINK_SETTINGS.WA_root_detail;
