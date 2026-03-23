@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
     <script>
+        // DATA LINK ASLI (TIDAK ADA YANG DIUBAH)
         const LINK_SETTINGS = {
             gb_WA_pro:  "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2p6dnJ2Nm0xdW41Mjd5Yi9HQldoYXRzQXBwX1Byb192MjYuMzAuemlwL2ZpbGU=",
             mb_WA:      "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzJvMHM1MGlzanIwaG0ydy9NQldoYXRzQXBwXzIuNi4yX2J5LnppcC9maWxl",
@@ -31,7 +32,6 @@
             --text-main: #1d1d1f;
         }
 
-        /* FIX: Kunci layar agar tidak bisa geser kanan kiri */
         html, body {
             max-width: 100%;
             overflow-x: hidden;
@@ -58,7 +58,6 @@
             pointer-events: none;
         }
 
-        /* FIX: Wrapper harus 100% lebar layar hp */
         .wrapper { 
             width: 100%;
             max-width: 850px; 
@@ -66,7 +65,7 @@
             padding: 40px 15px; 
             display: flex;
             flex-direction: column;
-            overflow-x: hidden; /* Tambahan pengaman */
+            overflow-x: hidden;
         }
 
         header { text-align: center; margin-bottom: 30px; width: 100%; }
@@ -121,7 +120,6 @@
 
         footer { text-align: center; padding: 40px 0; opacity: 0.6; font-size: 11px; width: 100%; }
 
-        /* FIX MOBILE CENTER */
         @media (max-width: 600px) {
             .wrapper { padding: 25px 12px; }
             .grid-info { grid-template-columns: 1fr; }
@@ -131,7 +129,6 @@
             .info-card p { justify-content: center; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
             .section-title { justify-content: center; }
             h1 { font-size: 28px; }
-            /* Mencegah animasi merusak lebar layar */
             [data-aos] { max-width: 100%; overflow: hidden; }
         }
     </style>
@@ -156,23 +153,23 @@
     <div class="download-list">
         <div class="glass-card download-box" data-aos="fade-right">
             <span style="font-weight: 600; font-size: 15px;">GB WA Pro Terbaru V26.30</span>
-            <a id="link-gb" href="#" target="_blank" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
+            <a id="link-gb" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
         <div class="glass-card download-box" data-aos="fade-left">
             <span style="font-weight: 600; font-size: 15px;">MB WA Terbaru V2.6.2</span>
-            <a id="link-mb" href="#" target="_blank" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
+            <a id="link-mb" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
         <div class="glass-card download-box" data-aos="fade-right">
             <span style="font-weight: 600; font-size: 15px;">RC WA Terbaru V10.61</span>
-            <a id="link-rc" href="#" target="_blank" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
+            <a id="link-rc" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
         <div class="glass-card download-box" data-aos="fade-left">
             <span style="font-weight: 600; font-size: 15px;">Delta WA Terbaru V3.4.4</span>
-            <a id="link-delta" href="#" target="_blank" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
+            <a id="link-delta" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
         <div class="glass-card download-box" data-aos="fade-up">
             <span style="font-weight: 600; font-size: 15px;">Lite X WA Terbaru V2.80.0</span>
-            <a id="link-litex" href="#" target="_blank" class="btn-download"><i class="fas fa-download"></i> DOWNLOAD</a>
+            <a id="link-litex" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
         </div>
     </div>
 
@@ -223,15 +220,31 @@
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('link-gb').href = LINK_SETTINGS.gb_WA_pro;
-        document.getElementById('link-mb').href = LINK_SETTINGS.mb_WA;
-        document.getElementById('link-rc').href = LINK_SETTINGS.rc_WA;
-        document.getElementById('link-delta').href = LINK_SETTINGS.delta_WA;
-        document.getElementById('link-litex').href = LINK_SETTINGS.lite_x_WA;
+        // --- LOGIKA JEMBATAN OTOMATIS (SISTEM BYPASS) ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const method = urlParams.get("method");
+
+        // Fungsi menerapkan link dengan pengecekan parameter bypass
+        const applyLink = (id, originalUrl) => {
+            const el = document.getElementById(id);
+            if (el) {
+                // Jika datang dari Web 3 bawa sinyal bypass/task, teruskan ke Web 2
+                el.href = method ? `${originalUrl}&method=${method}` : originalUrl;
+            }
+        };
+
+        applyLink('link-gb', LINK_SETTINGS.gb_WA_pro);
+        applyLink('link-mb', LINK_SETTINGS.mb_WA);
+        applyLink('link-rc', LINK_SETTINGS.rc_WA);
+        applyLink('link-delta', LINK_SETTINGS.delta_WA);
+        applyLink('link-litex', LINK_SETTINGS.lite_x_WA);
+        
+        // Link tutorial dan info lain tidak perlu bypass
         document.getElementById('link-tutorial').href = LINK_SETTINGS.video_tutorial;
         document.getElementById('link-zarchiver').href = LINK_SETTINGS.zarchiver;
         document.getElementById('link-wa-root').href = LINK_SETTINGS.WA_root_detail;
 
+        // --- INISIALISASI AOS ---
         AOS.init({ 
             duration: 700, 
             once: false, 
@@ -240,7 +253,7 @@
             disable: false
         });
 
-        // VISITOR COUNTER AKTIF (TERUPDATE OTOMATIS)
+        // --- VISITOR COUNTER ASLI ---
         let countEl = document.getElementById('count');
         let visitorCount = parseInt(localStorage.getItem('dicky_visitor_count')) || 2654844;
         visitorCount++; 
@@ -259,6 +272,7 @@
         animateCounter();
     });
 
+    // --- EFEK MOUSE (HANYA DESKTOP) ---
     if (!('ontouchstart' in window)) {
         window.addEventListener('mousemove', (e) => {
             const root = document.documentElement;
