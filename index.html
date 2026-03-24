@@ -13,7 +13,7 @@
         // DATA LINK ASLI (TIDAK ADA YANG DIUBAH)
         const LINK_SETTINGS = {
             gb_WA_pro:  "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2p6dnJ2Nm0xdW41Mjd5Yi9HQldoYXRzQXBwX1Byb192MjYuMzAuemlwL2ZpbGU=",
-            mb_WA:      "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2swaGtveGgyN3VwcWo0aS9NQldBVjI4MERpY2t5TmV3cy56aXAvZmlsZQ==",
+            mb_WA:      "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzJvMHM1MGlzanIwaG0ydy9NQldoYXRzQXBwXzIuNi4yX2J5LnppcC9maWxl",
             rc_WA:      "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzdzazY4b3RoMzBiOHF4My9SQ01vZHNfdjEwLjYxXyUyNTVCY29tLnJjd2ElMjU1RC56aXAvZmlsZQ",
             delta_WA:   "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL3J6OWk3Y2F6Ynl2MWdneC8lMjU1QkNPTS5ERUxUQSUyNTVEREVMVEFfR0JfdjMuNC40X3NpZ24uemlwL2ZpbGU=",
             lite_x_WA:  "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzQzbmc1bHp4dWduZ3FrOS9XQUxJVEVYXzIuODAuMF9DTE9ORS56aXAvZmlsZQ==",
@@ -219,6 +219,20 @@
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
+    // --- SECURITY LOCK: WAJIB LEWAT WEB 3 ---
+    (function() {
+        const WEB_3_URL = "https://dickynews.github.io/linklikecomment/"; 
+        const referrer = document.referrer;
+        
+        // Cek apakah pengunjung datang dari Web 3 (dickynews.github.io/linklikecomment)
+        // Jika tidak, tolak akses dan tendang balik ke Web 3
+        if (!referrer || !referrer.includes("dickynews.github.io/linklikecomment")) {
+            alert("Akses Ditolak! Kamu harus melewati verifikasi terlebih dahulu.");
+            window.location.replace(WEB_3_URL);
+        }
+    })();
+    // --- END SECURITY LOCK ---
+
     document.addEventListener('DOMContentLoaded', () => {
         // --- LOGIKA JEMBATAN OTOMATIS (SISTEM BYPASS) ---
         const urlParams = new URLSearchParams(window.location.search);
