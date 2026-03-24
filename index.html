@@ -52,6 +52,46 @@
             align-items: center;
         }
 
+        /* --- ANIMASI & DESAIN LAYAR BLOKIR MENGINTIMIDASI --- */
+        #block-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0c0c0c; z-index: 999999;
+            display: none; /* Disembunyikan secara default */
+            flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px;
+        }
+        .block-icon {
+            font-size: clamp(80px, 15vw, 150px); color: #ff3b30; margin-bottom: 25px;
+            animation: pulse-danger 0.8s infinite alternate;
+        }
+        .block-title {
+            font-size: clamp(35px, 8vw, 70px); font-family: 'Poppins', sans-serif;
+            font-weight: 900; color: #ff3b30; margin-bottom: 15px;
+            animation: shake 0.3s infinite; text-transform: uppercase;
+            line-height: 1.1; letter-spacing: 2px;
+        }
+        .block-msg {
+            font-size: clamp(16px, 4vw, 24px); font-family: 'Inter', sans-serif;
+            font-weight: 800; color: #ffffff; max-width: 800px;
+            line-height: 1.6; text-shadow: 0 0 10px rgba(255, 59, 48, 0.6);
+        }
+        @keyframes pulse-danger {
+            from { transform: scale(1); text-shadow: 0 0 20px #ff3b30; }
+            to { transform: scale(1.15); text-shadow: 0 0 50px #ff3b30, 0 0 100px #ff3b30; }
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            25% { transform: translate(-3px, -3px) rotate(-1deg); }
+            50% { transform: translate(-1px, 3px) rotate(1deg); }
+            75% { transform: translate(3px, 1px) rotate(0deg); }
+            100% { transform: translate(1px, -3px) rotate(-1deg); }
+        }
+
+        /* Pembungkus konten utama (disembunyikan saat loading agar tidak bocor) */
+        #main-content {
+            display: none; width: 100%; flex-direction: column; align-items: center;
+        }
+
         .bg-blur {
             position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;
             background: radial-gradient(circle at var(--m-x, 50%) var(--m-y, 50%), rgba(0, 122, 255, 0.15) 0%, transparent 45%);
@@ -135,106 +175,121 @@
 </head>
 <body>
 
-<div class="bg-blur"></div>
+<div id="block-screen">
+    <i class="fas fa-skull-crossbones block-icon"></i>
+    <div class="block-title">AKSES DIBLOKIR!!</div>
+    <div class="block-msg">ANDA TELAH MENCOBA MENGAKALI WEBSITE.<br>SILAHKAN MASUK WEBSITE DARI JALUR YANG BENAR!!</div>
+</div>
 
-<div class="wrapper">
-    <header data-aos="zoom-out-down">
-        <h1>Dicky News Official</h1>
-        <span class="sub-tag" style="letter-spacing: 2px; font-size: 9px; opacity: 0.6; font-weight: 800; display: block; margin-top: 5px;">BEST WHATSAPP MOD</span>
-    </header>
+<div id="main-content">
+    <div class="bg-blur"></div>
 
-    <div style="text-align: center; width: 100%;">
-        <div class="modern-badge" data-aos="fade-up">
-            <span style="font-size: 10px; font-weight: 800; opacity: 0.6;">TOTAL VISITORS:</span>
-            <span class="count-value" id="count" style="font-weight: 800; color: var(--primary);">0</span>
+    <div class="wrapper">
+        <header data-aos="zoom-out-down">
+            <h1>Dicky News Official</h1>
+            <span class="sub-tag" style="letter-spacing: 2px; font-size: 9px; opacity: 0.6; font-weight: 800; display: block; margin-top: 5px;">BEST WHATSAPP MOD</span>
+        </header>
+
+        <div style="text-align: center; width: 100%;">
+            <div class="modern-badge" data-aos="fade-up">
+                <span style="font-size: 10px; font-weight: 800; opacity: 0.6;">TOTAL VISITORS:</span>
+                <span class="count-value" id="count" style="font-weight: 800; color: var(--primary);">0</span>
+            </div>
         </div>
+
+        <div class="download-list">
+            <div class="glass-card download-box" data-aos="fade-right">
+                <span style="font-weight: 600; font-size: 15px;">GB WA Pro Terbaru V26.30</span>
+                <a id="link-gb" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
+            </div>
+            <div class="glass-card download-box" data-aos="fade-left">
+                <span style="font-weight: 600; font-size: 15px;">MB WA Terbaru V2.8.0</span>
+                <a id="link-mb" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
+            </div>
+            <div class="glass-card download-box" data-aos="fade-right">
+                <span style="font-weight: 600; font-size: 15px;">RC WA Terbaru V10.61</span>
+                <a id="link-rc" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
+            </div>
+            <div class="glass-card download-box" data-aos="fade-left">
+                <span style="font-weight: 600; font-size: 15px;">Delta WA Terbaru V3.4.4</span>
+                <a id="link-delta" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
+            </div>
+            <div class="glass-card download-box" data-aos="fade-up">
+                <span style="font-weight: 600; font-size: 15px;">Lite X WA Terbaru V2.80.0</span>
+                <a id="link-litex" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
+            </div>
+        </div>
+
+        <div class="glass-card info-card" data-aos="zoom-in">
+            <p><i class="fas fa-check-circle" style="color: var(--primary)"></i> Tidak Perlu Aktivator.</p>
+            <p><i class="fas fa-archive" style="color: var(--primary)"></i> Pakai <a id="link-zarchiver" href="#" target="_blank" style="color:var(--primary); font-weight:700; text-decoration:none;">Zarchiver</a> untuk ekstrak.</p>
+            <p><i class="fas fa-forward" style="color: var(--primary)"></i> Skip jika sudah punya versi sama.</p>
+        </div>
+
+        <div class="section-title" data-aos="fade-right" style="margin-left: 5px;"><i class="fab fa-youtube"></i> Tutorial Instalasi</div>
+        <div class="glass-card download-box" data-aos="zoom-in-up" style="background: #ff3b30; color: white; border: none;">
+            <span style="color: white; font-weight: 600;">Video Cara Download & Install</span>
+            <a id="link-tutorial" href="#" target="_blank" class="btn-download" style="background: white; color: #ff3b30;"><i class="fab fa-youtube"></i> TONTON</a>
+        </div>
+
+        <div class="grid-info" style="margin-top:10px;">
+            <div class="glass-card info-card" data-aos="fade-right">
+                <span class="section-title">Tata Cara :</span>
+                <p>• Matikan Play Protect</p>
+                <p>• Wajib Punya WA ORI</p>
+                <p>• Tautkan WA GB ke WA ORI</p>
+            </div>
+            <div class="glass-card info-card" data-aos="fade-left">
+                <span class="section-title">Penting :</span>
+                <p>⚠️ Gunakan Tautan Perangkat.</p>
+                <p>⚠️ Login Nomor = Resiko Banned.</p>
+            </div>
+        </div>
+
+        <div class="glass-card info-card" data-aos="slide-up" style="border-left: 6px solid #ff3b30; margin-top: 20px; text-align: center;">
+            <span class="section-title" style="color: #ff3b30; justify-content: center;"><i class="fas fa-bolt"></i> WA MOD ENHANCER (ROOT)</span>
+            <p>Atasi Memerlukan WA Resmi | Anti Banned</p>
+            <a id="link-wa-root" href="#" target="_blank" style="color:var(--primary); font-weight:800; text-decoration:none;">KLIK UNTUK DETAIL</a>
+        </div>
+
+        <div class="social-grid" data-aos="fade-up">
+            <a href="https://youtube.com/@dickynews" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/dickynews" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@dickynewsyt" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/dickynews45" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 Dicky News Official. All Rights Reserved.</p>
+        </footer>
     </div>
-
-    <div class="download-list">
-        <div class="glass-card download-box" data-aos="fade-right">
-            <span style="font-weight: 600; font-size: 15px;">GB WA Pro Terbaru V26.30</span>
-            <a id="link-gb" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
-        </div>
-        <div class="glass-card download-box" data-aos="fade-left">
-            <span style="font-weight: 600; font-size: 15px;">MB WA Terbaru V2.8.0</span>
-            <a id="link-mb" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
-        </div>
-        <div class="glass-card download-box" data-aos="fade-right">
-            <span style="font-weight: 600; font-size: 15px;">RC WA Terbaru V10.61</span>
-            <a id="link-rc" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
-        </div>
-        <div class="glass-card download-box" data-aos="fade-left">
-            <span style="font-weight: 600; font-size: 15px;">Delta WA Terbaru V3.4.4</span>
-            <a id="link-delta" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
-        </div>
-        <div class="glass-card download-box" data-aos="fade-up">
-            <span style="font-weight: 600; font-size: 15px;">Lite X WA Terbaru V2.80.0</span>
-            <a id="link-litex" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
-        </div>
-    </div>
-
-    <div class="glass-card info-card" data-aos="zoom-in">
-        <p><i class="fas fa-check-circle" style="color: var(--primary)"></i> Tidak Perlu Aktivator.</p>
-        <p><i class="fas fa-archive" style="color: var(--primary)"></i> Pakai <a id="link-zarchiver" href="#" target="_blank" style="color:var(--primary); font-weight:700; text-decoration:none;">Zarchiver</a> untuk ekstrak.</p>
-        <p><i class="fas fa-forward" style="color: var(--primary)"></i> Skip jika sudah punya versi sama.</p>
-    </div>
-
-    <div class="section-title" data-aos="fade-right" style="margin-left: 5px;"><i class="fab fa-youtube"></i> Tutorial Instalasi</div>
-    <div class="glass-card download-box" data-aos="zoom-in-up" style="background: #ff3b30; color: white; border: none;">
-        <span style="color: white; font-weight: 600;">Video Cara Download & Install</span>
-        <a id="link-tutorial" href="#" target="_blank" class="btn-download" style="background: white; color: #ff3b30;"><i class="fab fa-youtube"></i> TONTON</a>
-    </div>
-
-    <div class="grid-info" style="margin-top:10px;">
-        <div class="glass-card info-card" data-aos="fade-right">
-            <span class="section-title">Tata Cara :</span>
-            <p>• Matikan Play Protect</p>
-            <p>• Wajib Punya WA ORI</p>
-            <p>• Tautkan WA GB ke WA ORI</p>
-        </div>
-        <div class="glass-card info-card" data-aos="fade-left">
-            <span class="section-title">Penting :</span>
-            <p>⚠️ Gunakan Tautan Perangkat.</p>
-            <p>⚠️ Login Nomor = Resiko Banned.</p>
-        </div>
-    </div>
-
-    <div class="glass-card info-card" data-aos="slide-up" style="border-left: 6px solid #ff3b30; margin-top: 20px; text-align: center;">
-        <span class="section-title" style="color: #ff3b30; justify-content: center;"><i class="fas fa-bolt"></i> WA MOD ENHANCER (ROOT)</span>
-        <p>Atasi Memerlukan WA Resmi | Anti Banned</p>
-        <a id="link-wa-root" href="#" target="_blank" style="color:var(--primary); font-weight:800; text-decoration:none;">KLIK UNTUK DETAIL</a>
-    </div>
-
-    <div class="social-grid" data-aos="fade-up">
-        <a href="https://youtube.com/@dickynews" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>
-        <a href="https://www.instagram.com/dickynews" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.tiktok.com/@dickynewsyt" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
-        <a href="https://www.facebook.com/dickynews45" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 Dicky News Official. All Rights Reserved.</p>
-    </footer>
 </div>
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
-    // --- SECURITY LOCK: WAJIB LEWAT WEB 3 ---
-    (function() {
-        const WEB_3_URL = "https://dickynews.github.io/linklikecomment/"; 
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- 1. SECURITY LOCK SYSTEM ---
         const referrer = document.referrer;
+        const mainContent = document.getElementById("main-content");
+        const blockScreen = document.getElementById("block-screen");
         
         // Cek apakah pengunjung datang dari Web 3 (dickynews.github.io/linklikecomment)
-        // Jika tidak, tolak akses dan tendang balik ke Web 3
         if (!referrer || !referrer.includes("dickynews.github.io/linklikecomment")) {
-            alert("Akses Ditolak! Kamu harus melewati verifikasi terlebih dahulu.");
-            window.location.replace(WEB_3_URL);
+            // Tampilkan layar intimidasi
+            blockScreen.style.display = "flex";
+            
+            // HAPUS TOTAL kode asli web dari browser agar tidak bisa di-inspect element
+            mainContent.innerHTML = ""; 
+            
+            // Hentikan proses script ke bawah
+            return; 
         }
-    })();
-    // --- END SECURITY LOCK ---
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- LOGIKA JEMBATAN OTOMATIS (SISTEM BYPASS) ---
+        // JIKA AMAN: Tampilkan konten asli
+        mainContent.style.display = "flex";
+        // --- END SECURITY LOCK ---
+
+        // --- 2. LOGIKA JEMBATAN OTOMATIS (SISTEM BYPASS) ---
         const urlParams = new URLSearchParams(window.location.search);
         const method = urlParams.get("method");
 
@@ -242,7 +297,6 @@
         const applyLink = (id, originalUrl) => {
             const el = document.getElementById(id);
             if (el) {
-                // PENYEMPURNAAN: Jika ada method bypass, tempelkan ke link download (Web 2)
                 el.href = method ? `${originalUrl}&method=${method}` : originalUrl;
             }
         };
@@ -258,7 +312,7 @@
         document.getElementById('link-zarchiver').href = LINK_SETTINGS.zarchiver;
         document.getElementById('link-wa-root').href = LINK_SETTINGS.WA_root_detail;
 
-        // --- INISIALISASI AOS ---
+        // --- 3. INISIALISASI AOS ---
         AOS.init({ 
             duration: 700, 
             once: false, 
@@ -267,7 +321,7 @@
             disable: false
         });
 
-        // --- VISITOR COUNTER ASLI ---
+        // --- 4. VISITOR COUNTER ASLI ---
         let countEl = document.getElementById('count');
         let visitorCount = parseInt(localStorage.getItem('dicky_visitor_count')) || 2654844;
         visitorCount++; 
