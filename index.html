@@ -10,13 +10,15 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
     <script>
-        // DATA LINK ASLI (TIDAK ADA YANG DIUBAH)
+        // DATA LINK ASLI (TIDAK ADA YANG DIUBAH, DITAMBAHKAN 2 LINK BARU)
         const LINK_SETTINGS = {
             gb_WA_pro:  "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2wyeGtwaGY1cXNudjgzbi9HQldoYXRzQXBwX1Byb192MjYuNDcuemlwL2ZpbGU=",
             mb_WA:      "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2swaGtveGgyN3VwcWo0aS9NQldBVjI4MERpY2t5TmV3cy56aXAvZmlsZQ==",
             rc_WA:      "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2pyczl3OTh3OHh0aWV5Ni9SQ01vZHMrdjEwLjcwK1tjb20ucmN3YV0rRGlja3krTmV3cy56aXAvZmlsZQ==",
-            delta_WA:   "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2o2Y2NxcGM5OWc1b2hpcy9bQ09NLkRFTFRBXURFTFRBX0dCX3YzLjUuMF9zaWduLnppcC9maWxl",
+            delta_WA:   "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzcyZWhhM3N1NGcyM3F4aS8lMjU1QkNPTS5ERUxUQSUyNTVEREVMVEFfR0JfdjMuNS4xLnppcC9maWxl",
             lite_x_WA:  "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL3p1bmxjdmh6MHQ2eGM0Ni9XQUxJVEVYXzMuMC4wX0RpY2t5TmV3cy56aXAvZmlsZQ==",
+            wa_enhancer_ori: "MASUKKAN_LINK_DI_SINI",
+            wa_enhancer_biz: "MASUKKAN_LINK_DI_SINI",
             video_tutorial: "https://youtu.be/g7ekOGN3MhM",
             zarchiver:      "https://sfl.gl/NtuTRrzI",
             WA_root_detail: "https://youtu.be/KRBuKjfwJ5k"
@@ -211,12 +213,20 @@
                 <a id="link-rc" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
             </div>
             <div class="glass-card download-box" data-aos="fade-left">
-                <span style="font-weight: 600; font-size: 15px;">Delta WA Terbaru V3.5.0</span>
+                <span style="font-weight: 600; font-size: 15px;">Delta WA Terbaru V3.5.1</span>
                 <a id="link-delta" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
             </div>
             <div class="glass-card download-box" data-aos="fade-up">
                 <span style="font-weight: 600; font-size: 15px;">Lite X WA Terbaru V3.0.0</span>
                 <a id="link-litex" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
+            </div>
+            <div class="glass-card download-box" data-aos="fade-right">
+                <span style="font-weight: 600; font-size: 15px;">WA ENHANCER ORIGINAL</span>
+                <a id="link-wa-enhancer-ori" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
+            </div>
+            <div class="glass-card download-box" data-aos="fade-left">
+                <span style="font-weight: 600; font-size: 15px;">WA ENHANCER BUSINESS</span>
+                <a id="link-wa-enhancer-biz" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
             </div>
         </div>
 
@@ -306,6 +316,8 @@
         applyLink('link-rc', LINK_SETTINGS.rc_WA);
         applyLink('link-delta', LINK_SETTINGS.delta_WA);
         applyLink('link-litex', LINK_SETTINGS.lite_x_WA);
+        applyLink('link-wa-enhancer-ori', LINK_SETTINGS.wa_enhancer_ori);
+        applyLink('link-wa-enhancer-biz', LINK_SETTINGS.wa_enhancer_biz);
         
         // Link tutorial dan info lain tidak perlu bypass (tetap normal)
         document.getElementById('link-tutorial').href = LINK_SETTINGS.video_tutorial;
