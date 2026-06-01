@@ -5,17 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dicky News Official</title>
     
+    <!-- DEPENDENCIES PACK (Font, Icon, CSS Plugin) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+<body>
+
     <!-- ========================================================================================= -->
-    <!-- [EDIT DI SINI - AREA 1] DATA URL LINK WHATSAPP (SEKARANG DI BARIS ATAS!)                  -->
+    <!-- [EDIT DI SINI - AREA DATA LINK WHATSAPP]                                                  -->
     <!-- ========================================================================================= -->
     <script>
-        // DATA LINK ASLI (TIDAK ADA YANG DIUBAH, UTUH ALL)
         const LINK_SETTINGS = {
-            gb_WA_pro:       "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL3V5aTVianp2ZzBnbXVoMC9HQldoYXRzQXBwX1Byb192MjYuNjAuemlwL2ZpbGU=",
+            gb_WA_pro:       "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL3V5aTVianp2ZzBnbXVoMC9HQldoYXRzQXBwX_Byb192MjYuNjAuemlwL2ZpbGU=",
             mb_WA:           "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL29ydGNsajg1Nm5oamNxYS9NQldoYXRzQXBwXzIuOC4xX2J5X3N0ZWZhbm9ZR19GX3JoZjJDMnJ5Q2s2NmFqWmhoY1UwdnJjR1FybWQ0S3pXSV92WDJoanhVLnppcC9maWxl",
             rc_WA:           "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2YwcGJqMXdiMWFpanlncS9SQ01vZHMrdjEwLjcxLnppcC9maWxl",
             delta_WA:        "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzcyZWhhM3N1NGcyM3F4aS8lMjU1QkNPTS5ERUxUQSUyNTVEREVMVEFfR0JfdjMuNS4xLnppcC9maWxl",
             lite_x_WA:       "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzlnZ3didnRkaTZjd3U5eC9XQUxJVEVYXzMuMTAuMF9DTE9ORES56aXAvZmlsZQ==",
+            dh_WA:           "https://dickynews.github.io/linkdickynews/?v=N19VUkw=",
             wa_enhancer_ori: "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly9naXRodWIuY29tL0RldjRNb2Qvd2FlbmhhbmNlcg==",
             wa_enhancer_biz: "https://dickynews.github.io/linkdickynews/?v=aHR0cHM6Ly9naXRodWIuY29tL0RldjRNb2Qvd2FlbmhhbmNlcg==",
             video_tutorial:  "https://youtu.be/g7ekOGN3MhM",
@@ -25,12 +32,6 @@
     </script>
     <!-- ========================================================================================= -->
 
-    <!-- DEPENDENCIES PACK (Font, Icon, CSS Plugin) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-</head>
-<body>
 
     <!-- SCREEN SECURITY -->
     <div id="block-screen">
@@ -44,8 +45,22 @@
         <div class="bg-blur"></div>
         <div class="wrapper">
 
+            <!-- BRANDING HEADER -->
+            <header data-aos="zoom-out-down" style="margin-top: 25px;">
+                <h1>Dicky News Official</h1>
+                <span class="sub-tag" style="letter-spacing:2px; font-size:9px; opacity:0.6; font-weight:800; display:block; margin-top:5px;">BEST WHATSAPP MOD</span>
+            </header>
+
+            <!-- COUNTER STATS -->
+            <div style="text-align: center; width: 100%;">
+                <div class="modern-badge" data-aos="fade-up">
+                    <span style="font-size:10px; font-weight:800; opacity:0.6;">TOTAL VISITORS:</span>
+                    <span class="count-value" id="count" style="font-weight:800; color:var(--primary);">0</span>
+                </div>
+            </div>
+
             <!-- ========================================================================================= -->
-            <!-- [EDIT DI SINI - AREA 2] LIST TOMBOL & VERSI WHATSAPP MOD (LANGSUNG KELIHATAN DI ATAS!)   -->
+            <!-- [EDIT DI SINI - AREA TOMBOL & VERSI WHATSAPP MOD]                                         -->
             <!-- ========================================================================================= -->
             <div class="download-list">
 
@@ -79,6 +94,12 @@
                     <a id="link-litex" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
                 </div>
 
+                <!-- 5b. DH WHATSAPP -->
+                <div class="glass-card download-box" data-aos="fade-up">
+                    <span style="font-weight:600; font-size:15px;">DH WhatsApp Terbaru</span>
+                    <a id="link-dh" href="#" target="_blank" class="btn-download target-link"><i class="fas fa-download"></i> DOWNLOAD</a>
+                </div>
+
                 <!-- 6. WA ENHANCER ORIGINAL -->
                 <div class="glass-card download-box" data-aos="fade-right">
                     <span style="font-weight:600; font-size:15px;">WA ENHANCER ORIGINAL</span>
@@ -93,23 +114,6 @@
 
             </div>
             <!-- ========================================================================================= -->
-            <!-- AKHIR DARI AREA EDIT UTAMA                                                                -->
-            <!-- ========================================================================================= -->
-
-
-            <!-- BRANDING HEADER -->
-            <header data-aos="zoom-out-down" style="margin-top: 25px;">
-                <h1>Dicky News Official</h1>
-                <span class="sub-tag" style="letter-spacing:2px; font-size:9px; opacity:0.6; font-weight:800; display:block; margin-top:5px;">BEST WHATSAPP MOD</span>
-            </header>
-
-            <!-- COUNTER STATS -->
-            <div style="text-align: center; width: 100%;">
-                <div class="modern-badge" data-aos="fade-up">
-                    <span style="font-size:10px; font-weight:800; opacity:0.6;">TOTAL VISITORS:</span>
-                    <span class="count-value" id="count" style="font-weight:800; color:var(--primary);">0</span>
-                </div>
-            </div>
 
             <!-- NOTES / KETENTUAN EKSTRAKSI -->
             <div class="glass-card info-card" data-aos="zoom-in">
@@ -163,9 +167,7 @@
         </div>
     </div>
 
-    <!-- ========================================================================================= -->
-    <!-- BAGIAN CSS STYLING (SENGAJA DI TARUH DI BAWAH BIAR GAK NGEDISTRAKSI SAAT KAMU EDIT LINK)   -->
-    <!-- ========================================================================================= -->
+    <!-- BAGIAN CSS STYLING -->
     <style>
         :root {
             --primary: #007AFF;
@@ -243,6 +245,7 @@
             applyLink('link-rc', LINK_SETTINGS.rc_WA);
             applyLink('link-delta', LINK_SETTINGS.delta_WA);
             applyLink('link-litex', LINK_SETTINGS.lite_x_WA);
+            applyLink('link-dh', LINK_SETTINGS.dh_WA);
             applyLink('link-wa-enhancer-ori', LINK_SETTINGS.wa_enhancer_ori);
             applyLink('link-wa-enhancer-biz', LINK_SETTINGS.wa_enhancer_biz);
             
