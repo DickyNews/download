@@ -1,0 +1,73 @@
+name: Publish Web Utama Link
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Tombol Web Utama yang akan diperbarui
+        required: true
+        type: choice
+        options:
+          - gb_WA_pro
+          - mb_WA
+          - delta_WA
+          - lite_x_WA
+          - wa_enhancer_ori
+          - wa_enhancer_biz
+      mediafire_url:
+        description: Link MediaFire tujuan
+        required: true
+        type: string
+permissions:
+  contents: write
+concurrency:
+  group: publish-web-utama-link
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Web Utama
+        uses: actions/checkout@v4
+      - name: Validate and update selected link
+        env:
+          TARGET: ${{ inputs.target }}
+          MEDIAFIRE_URL: ${{ inputs.mediafire_url }}
+        run: |
+          python3 - <<'PY'
+          import os, re, json, base64
+          from urllib.parse import quote
+          path = "index.html"
+          target = os.environ["TARGET"]
+          url = os.environ["MEDIAFIRE_URL"].strip()
+          allowed = {"gb_WA_pro","mb_WA","delta_WA","lite_x_WA","wa_enhancer_ori","wa_enhancer_biz"}
+          if target not in allowed:
+              raise SystemExit("Target tidak diizinkan")
+          if not re.fullmatch(r"https://(?:www\\.)?mediafire\\.com/(?:file|download)/[^\\s]+", url, re.I):
+              raise SystemExit("URL harus berupa link MediaFire HTTPS yang valid")
+          with open(path, encoding="utf-8") as f:
+              html = f.read()
+          settings = re.search(r"const LINK_SETTINGS = \\{([\\s\\S]*?)\\n        \\};", html)
+          if not settings:
+              raise SystemExit("LINK_SETTINGS tidak ditemukan; file tidak diubah")
+          encoded = base64.urlsafe_b64encode(json.dumps({"url":url}, separators=(",",":")).encode()).decode().rstrip("=")
+          generated = "https://dickynews.github.io/youtubeadmin/?module=link&v=" + encoded
+          line = re.compile(r"(^\\s*" + re.escape(target) + r"\\s*:\\s*)\"[^\"]*\"", re.M)
+          body, n = line.subn(lambda m: m.group(1) + json.dumps(generated), settings.group(1), count=1)
+          if n != 1:
+              raise SystemExit("Target tidak ditemukan tepat satu kali; file tidak diubah")
+          html = html[:settings.start(1)] + body + html[settings.end(1):]
+          with open(path, "w", encoding="utf-8") as f:
+              f.write(html)
+          print("Link diperbarui untuk tombol:", target)
+          PY
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "Tidak ada perubahan."
+            exit 0
+          fi
+          git commit -m "Publish Web Utama link: ${{ inputs.target }}"
+          git push
