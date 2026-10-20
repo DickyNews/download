@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       targets:
-        description: Daftar tombol, pisahkan dengan koma (contoh gb_WA_pro,mb_WA)
+        description: Daftar tombol dipisahkan koma (contoh gb_WA_pro,mb_WA)
         required: true
         type: string
       mediafire_url:
@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Checkout Web Utama
         uses: actions/checkout@v4
-      - name: Validate and update selected link
+      - name: Validate and update selected links
         env:
           TARGETS: ${{ inputs.targets }}
           MEDIAFIRE_URL: ${{ inputs.mediafire_url }}
@@ -34,8 +34,8 @@ jobs:
           url = os.environ["MEDIAFIRE_URL"].strip()
           allowed = {"gb_WA_pro","mb_WA","delta_WA","lite_x_WA","wa_enhancer_ori","wa_enhancer_biz"}
           parsed = urlparse(url)
-          if target not in allowed:
-              raise SystemExit("Target tidak diizinkan")
+          if not targets or len(set(targets)) != len(targets) or any(t not in allowed for t in targets):
+              raise SystemExit("Daftar tombol kosong, duplikat, atau tidak diizinkan")
           if parsed.scheme != "https" or parsed.hostname not in {"mediafire.com","www.mediafire.com"} or not parsed.path.startswith(("/file/","/download/")):
               raise SystemExit("URL harus berupa link MediaFire HTTPS yang valid")
           with open(path, encoding="utf-8") as f:
@@ -49,13 +49,13 @@ jobs:
           lines = section.splitlines()
           encoded = base64.urlsafe_b64encode(json.dumps({"url":url}, separators=(",",":")).encode()).decode().rstrip("=")
           generated = "https://dickynews.github.io/youtubeadmin/?module=link&v=" + encoded
-          prefix = "            " + target + ":"
-          hits = [i for i,line in enumerate(lines) if line.lstrip().startswith(target + ":")]
-          if len(hits) != 1:
-              raise SystemExit("Target tidak ditemukan tepat satu kali; file tidak diubah")
-          i = hits[0]
-          indent = lines[i][:len(lines[i])-len(lines[i].lstrip())]
-          lines[i] = indent + target + ": " + json.dumps(generated) + ","
+          for target in targets:
+              hits = [i for i,line in enumerate(lines) if line.lstrip().startswith(target + ":")]
+              if len(hits) != 1:
+                  raise SystemExit("Target tidak ditemukan tepat satu kali: " + target)
+              i = hits[0]
+              indent = lines[i][:len(lines[i])-len(lines[i].lstrip())]
+              lines[i] = indent + target + ": " + json.dumps(generated) + ","
           updated = "\n".join(lines)
           html = html[:start] + updated + html[end:]
           with open(path, "w", encoding="utf-8") as f:
