@@ -180,7 +180,7 @@
             const mainContent = document.getElementById("main-content");
             const blockScreen = document.getElementById("block-screen");
             
-            if (!referrer || !referrer.includes("dickynews.github.io/linklikecomment")) {
+            if (!referrer || !(referrer.includes("dickynews.github.io/linklikecomment") || referrer.includes("dickynews.github.io/youtubeadmin/linklikecomment"))) {
                 blockScreen.style.display = "flex";
                 mainContent.innerHTML = ""; 
                 return; 
