@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dickynews.github.io/download/sitemap.xml
