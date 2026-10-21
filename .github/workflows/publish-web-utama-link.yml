@@ -2,17 +2,9 @@ name: Publish Web Utama Link
 on:
   workflow_dispatch:
     inputs:
-      targets:
-        description: Daftar tombol dipisahkan koma (contoh gb_WA_pro,mb_WA)
+      target_config:
+        description: Konfigurasi link dan versi per aplikasi dalam JSON
         required: true
-        type: string
-      mediafire_url:
-        description: Link MediaFire tujuan
-        required: true
-        type: string
-      version_suffix:
-        description: Ekor versi untuk judul target terpilih, contoh V26.98 (kosongkan jika tidak diubah)
-        required: false
         type: string
 permissions:
   contents: write
@@ -34,18 +26,16 @@ jobs:
         uses: actions/checkout@v4
       - name: Validate and update selected links and titles
         env:
-          TARGETS: ${{ inputs.targets }}
-          MEDIAFIRE_URL: ${{ inputs.mediafire_url }}
-          VERSION_SUFFIX: ${{ inputs.version_suffix }}
+          TARGET_CONFIG: ${{ inputs.target_config }}
         run: |
           python3 - <<'PY'
           import os, json, base64, re
           from urllib.parse import urlparse
 
-          path = "index.html"
-          targets = [item.strip() for item in os.environ["TARGETS"].split(",") if item.strip()]
-          url = os.environ["MEDIAFIRE_URL"].strip()
-          version_suffix = os.environ.get("VERSION_SUFFIX", "").strip()
+          try:
+              config = json.loads(os.environ["TARGET_CONFIG"])
+          except Exception as exc:
+              raise SystemExit("Konfigurasi target bukan JSON valid") from exc
           allowed = {"gb_WA_pro","mb_WA","delta_WA","lite_x_WA","wa_enhancer_ori","wa_enhancer_biz"}
           versioned_titles = {
               "gb_WA_pro": ("GB WA PRO TERBARU ", "link-gb"),
@@ -53,86 +43,67 @@ jobs:
               "delta_WA": ("DELTA WA TERBARU ", "link-delta"),
               "lite_x_WA": ("LITE X WA TERBARU ", "link-litex"),
           }
+          if not isinstance(config, dict) or not config or any(t not in allowed for t in config):
+              raise SystemExit("Konfigurasi target kosong atau tidak diizinkan")
+          normalized = {}
+          for target, item in config.items():
+              if not isinstance(item, dict):
+                  raise SystemExit("Konfigurasi tidak valid: " + target)
+              url = str(item.get("mediafire_url", "")).strip()
+              suffix = str(item.get("version_suffix", "")).strip()
+              parsed = urlparse(url)
+              if parsed.scheme != "https" or parsed.hostname not in {"mediafire.com","www.mediafire.com"} or not parsed.path.startswith(("/file/","/download/")):
+                  raise SystemExit("URL MediaFire tidak valid untuk " + target)
+              if suffix and not re.fullmatch(r"[vV]?[0-9]+(?:[._+-][0-9A-Za-z]+)*", suffix):
+                  raise SystemExit("Versi tidak valid untuk " + target)
+              if suffix and not suffix.upper().startswith("V"):
+                  suffix = "V" + suffix
+              normalized[target] = {"url":url,"suffix":suffix}
 
-          if not targets or len(set(targets)) != len(targets) or any(t not in allowed for t in targets):
-              raise SystemExit("Daftar tombol kosong, duplikat, atau tidak diizinkan")
-          if version_suffix and not re.fullmatch(r"[A-Za-z0-9._+-]{1,40}", version_suffix):
-              raise SystemExit("Ekor versi tidak valid; gunakan huruf, angka, titik, garis bawah, +, atau -")
-          parsed = urlparse(url)
-          if parsed.scheme != "https" or parsed.hostname not in {"mediafire.com","www.mediafire.com"} or not parsed.path.startswith(("/file/","/download/")):
-              raise SystemExit("URL harus berupa link MediaFire HTTPS yang valid")
-
+          path = "index.html"
           with open(path, encoding="utf-8") as f:
               html = f.read()
-
           marker = "const LINK_SETTINGS = {"
           start = html.find(marker)
-          end = html.find("\n        };", start)
+          end = html.find("\\n        };", start)
           if start < 0 or end < 0:
               raise SystemExit("LINK_SETTINGS tidak ditemukan; file tidak diubah")
           lines = html[start:end].splitlines()
-          encoded = base64.urlsafe_b64encode(json.dumps({"url":url}, separators=(",",":")).encode()).decode().rstrip("=")
-          generated = "https://dickynews.github.io/youtubeadmin/?module=link&v=" + encoded
-          for target in targets:
+          for target, item in normalized.items():
+              encoded = base64.urlsafe_b64encode(json.dumps({"url":item["url"]}, separators=(",",":")).encode()).decode().rstrip("=")
+              generated = "https://dickynews.github.io/youtubeadmin/?module=link&v=" + encoded
               hits = [i for i,line in enumerate(lines) if line.lstrip().startswith(target + ":")]
               if len(hits) != 1:
                   raise SystemExit("Target tidak ditemukan tepat satu kali: " + target)
               i = hits[0]
               indent = lines[i][:len(lines[i])-len(lines[i].lstrip())]
               lines[i] = indent + target + ": " + json.dumps(generated) + ","
-          html = html[:start] + "\n".join(lines) + html[end:]
+          html = html[:start] + "\\n".join(lines) + html[end:]
 
-          if version_suffix:
-              for target in targets:
-                  mapping = versioned_titles.get(target)
-                  if not mapping:
-                      continue
-                  prefix, title_id = mapping
-                  # Find the exact card by its unique download link ID.
-                  anchor = re.search(r'<a\b[^>]*\bid="' + re.escape(title_id) + r'"(?=[\s>])', html)
-                  if not anchor:
-                      raise SystemExit("Tombol produk tidak ditemukan: " + target)
-                  card_start = html.rfind('<div class="glass-card download-box"', 0, anchor.start())
-                  card_end = html.find("</div>", anchor.end())
-                  if card_start < 0 or card_end < 0:
-                      raise SystemExit("Kartu produk tidak ditemukan: " + target)
-                  card = html[card_start:card_end]
-                  title_pattern = re.compile(r'(<span\b[^>]*>)' + re.escape(prefix) + r'[^<]*(</span>)')
-                  updated_card, count = title_pattern.subn(lambda m: m.group(1) + prefix + version_suffix + m.group(2), card, count=1)
-                  if count != 1:
-                      raise SystemExit("Judul versi tidak ditemukan di kartu target: " + target)
-                  html = html[:card_start] + updated_card + html[card_end:]
-                  new_title = prefix + version_suffix
-                  print("Judul diperbarui:", target, "=>", new_title)
+          for target, item in normalized.items():
+              suffix = item["suffix"]
+              mapping = versioned_titles.get(target)
+              if not suffix or not mapping:
+                  continue
+              prefix, title_id = mapping
+              anchor = re.search(r'<a\\b[^>]*\\bid="' + re.escape(title_id) + r'"(?=[\\s>])', html)
+              if not anchor:
+                  raise SystemExit("Tombol produk tidak ditemukan: " + target)
+              card_start = html.rfind('<div class="glass-card download-box"', 0, anchor.start())
+              card_end = html.find("</div>", anchor.end())
+              if card_start < 0 or card_end < 0:
+                  raise SystemExit("Kartu produk tidak ditemukan: " + target)
+              card = html[card_start:card_end]
+              title_pattern = re.compile(r'(<span\\b[^>]*>)' + re.escape(prefix) + r'[^<]*(</span>)')
+              updated_card, count = title_pattern.subn(lambda m: m.group(1) + prefix + suffix + m.group(2), card, count=1)
+              if count != 1:
+                  raise SystemExit("Judul versi tidak ditemukan di kartu target: " + target)
+              html = html[:card_start] + updated_card + html[card_end:]
+              print("Judul diperbarui:", target, "=>", prefix + suffix)
 
           with open(path, "w", encoding="utf-8") as f:
               f.write(html)
-          print("Link diperbarui untuk tombol:", ", ".join(targets))
-          if version_suffix:
-              print("Ekor versi diproses:", version_suffix)
-          PY
-      - name: Verify changed titles before commit
-        env:
-          TARGETS: ${{ inputs.targets }}
-          VERSION_SUFFIX: ${{ inputs.version_suffix }}
-        run: |
-          python3 - <<'PY'
-          import os
-          html = open("index.html", encoding="utf-8").read()
-          suffix = os.environ.get("VERSION_SUFFIX", "").strip()
-          mapping = {
-              "gb_WA_pro": "GB WA PRO TERBARU ",
-              "mb_WA": "MB WA TERBARU ",
-              "delta_WA": "DELTA WA TERBARU ",
-              "lite_x_WA": "LITE X WA TERBARU ",
-          }
-          if suffix:
-              for target in os.environ["TARGETS"].split(","):
-                  target = target.strip()
-                  prefix = mapping.get(target)
-                  if prefix and (prefix + suffix) not in html:
-                      raise SystemExit("VERIFIKASI GAGAL: judul tidak cocok untuk " + target)
-          print("Verifikasi judul selesai.")
+          print("Link diperbarui untuk tombol:", ", ".join(normalized))
           PY
       - name: Commit and push
         run: |
@@ -143,7 +114,7 @@ jobs:
             echo "Tidak ada perubahan."
             exit 0
           fi
-          git commit -m "Publish Web Utama links and selected versions: ${{ inputs.targets }}"
+          git commit -m "Publish Web Utama links and per-app versions"
           git push
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
