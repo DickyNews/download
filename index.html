@@ -111,12 +111,12 @@
                 <a id="link-wa-root" href="#" target="_blank" style="color:var(--primary); font-weight:800; text-decoration:none;">KLIK UNTUK DETAIL</a>
             </div>
 
-            <div class="social-grid" data-aos="fade-up">
-                <a href="https://youtube.com/@dickynews" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>
-                <a href="https://www.instagram.com/dickynews" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.tiktok.com/@dickynewsyt" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i></a>
-                <a href="https://www.facebook.com/dickynews45" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-            </div>
+            <section class="social-owner-section" data-aos="fade-up" aria-label="Social Media Owner">
+                <div class="social-owner-heading">SOCIAL MEDIA OWNER</div>
+                <a class="social-owner-link owner-youtube" href="https://www.youtube.com/@dickynews" target="_blank" rel="noopener noreferrer" aria-label="YouTube Dicky News"><i class="fab fa-youtube" aria-hidden="true"></i><span>YouTube : Dicky News</span><span class="owner-arrow" aria-hidden="true">↗</span></a>
+                <a class="social-owner-link owner-tiktok" href="https://www.tiktok.com/@dickynewsyt" target="_blank" rel="noopener noreferrer" aria-label="TikTok Dicky News Method"><i class="fab fa-tiktok" aria-hidden="true"></i><span>TikTok : Dicky News Method</span><span class="owner-arrow" aria-hidden="true">↗</span></a>
+                <a class="social-owner-link owner-instagram" href="https://www.instagram.com/dickynews" target="_blank" rel="noopener noreferrer" aria-label="Instagram Dicky News"><i class="fab fa-instagram" aria-hidden="true"></i><span>Instagram : @dickynews</span><span class="owner-arrow" aria-hidden="true">↗</span></a>
+            </section>
 
             <footer>
                 <p>&copy; 2026 Dicky News Official. All Rights Reserved.</p>
@@ -157,6 +157,14 @@
         .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
         .social-grid { display: flex; justify-content: center; gap: 12px; margin-top: 30px; width: 100%; }
         .social-icon { width: 52px; height: 52px; background: white; display: flex; align-items: center; justify-content: center; border-radius: 16px; font-size: 20px; color: #1d1d1f; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        .social-owner-section { display:flex; flex-direction:column; align-items:center; gap:12px; width:100%; margin:30px auto 8px; }
+        .social-owner-heading { font-size:12px; font-weight:900; letter-spacing:2px; color:#087f8c; text-align:center; margin-bottom:2px; }
+        .social-owner-link { box-sizing:border-box; display:flex; align-items:center; justify-content:center; gap:10px; width:min(100%,390px); min-height:48px; padding:11px 15px; border-radius:999px; border:1px solid rgba(0,140,150,.65); background:rgba(255,255,255,.8); color:#20212a; text-decoration:none; font-size:13px; font-weight:800; box-shadow:0 0 14px rgba(0,180,190,.12), inset 0 0 12px rgba(0,140,150,.05); transition:transform .2s ease,box-shadow .2s ease; }
+        .social-owner-link:hover { transform:translateY(-2px); box-shadow:0 0 20px rgba(0,180,190,.25); }
+        .social-owner-link i { flex:0 0 auto; font-size:20px; }
+        .owner-youtube i { color:#ff304f; } .owner-tiktok i { color:#111; text-shadow:1px 1px #25f4ee,-1px -1px #fe2c55; } .owner-instagram i { color:#d9469a; }
+        .social-owner-link span:nth-child(2) { min-width:0; overflow-wrap:anywhere; }
+        .owner-arrow { flex:0 0 auto; margin-left:auto; font-size:17px; color:#087f8c; }
         footer { text-align: center; padding: 40px 0; opacity: 0.6; font-size: 11px; width: 100%; }
         @media (max-width: 600px) {
             .wrapper { padding: 25px 12px; }
