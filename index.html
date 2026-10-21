@@ -191,9 +191,40 @@
             const urlParams = new URLSearchParams(window.location.search);
             const method = urlParams.get("method");
 
+            const adminDirect = urlParams.get("admin_direct") === "1" &&
+                Number(localStorage.getItem("dickynews_admin_direct_until") || 0) > Date.now();
+
+            const decodeDestination = (raw) => {
+                try {
+                    const u = new URL(raw);
+                    const encoded = u.searchParams.get("v");
+                    if (!encoded) return raw;
+                    if (u.searchParams.get("module") === "link") {
+                        const normalized = encoded.replace(/-/g, "+").replace(/_/g, "/");
+                        const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
+                        const data = JSON.parse(atob(padded));
+                        const destination = new URL(data.url);
+                        if (destination.protocol === "https:" && /(^|\\.)mediafire\\.com$/i.test(destination.hostname)) return destination.href;
+                        return raw;
+                    }
+                    if (u.pathname.includes("/linkdickynews/")) {
+                        const destination = atob(encoded);
+                        const target = new URL(destination);
+                        if (target.protocol === "https:" || target.protocol === "http:") return target.href;
+                    }
+                } catch (_) {}
+                return raw;
+            };
+
             const applyLink = (id, originalUrl) => {
                 const el = document.getElementById(id);
-                if (el) { el.href = method ? `${originalUrl}&method=${method}` : originalUrl; }
+                if (!el) return;
+                const normalUrl = method ? `${originalUrl}&method=${method}` : originalUrl;
+                el.href = adminDirect ? decodeDestination(normalUrl) : normalUrl;
+                if (adminDirect) {
+                    el.removeAttribute("target");
+                    el.title = "Akses langsung admin";
+                }
             };
 
             applyLink('link-gb', LINK_SETTINGS.gb_WA_pro);
