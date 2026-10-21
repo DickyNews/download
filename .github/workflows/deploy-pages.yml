@@ -72,7 +72,7 @@ jobs:
             }
 
             if (!currentDeployment) {
-              core.setFailed('No successful GitHub Pages deployment found for this commit; refusing to alter older deployments.');
+              core.warning('No successful deployment status is visible yet for this commit. Skipping stale-status cleanup; the Pages deploy step is not being rolled back.');
               return;
             }
 
