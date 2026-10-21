@@ -204,7 +204,7 @@
                         const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
                         const data = JSON.parse(atob(padded));
                         const destination = new URL(data.url);
-                        if (destination.protocol === "https:" && /(^|\\.)mediafire\\.com$/i.test(destination.hostname)) return destination.href;
+                        if (destination.protocol === "https:" && /(^|\.)mediafire\.com$/i.test(destination.hostname)) return destination.href;
                         return raw;
                     }
                     if (u.pathname.includes("/linkdickynews/")) {
