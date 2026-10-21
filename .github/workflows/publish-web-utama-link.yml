@@ -73,14 +73,32 @@ jobs:
           updated = "\n".join(lines)
           html = html[:start] + updated + html[end:]
           if version_suffix:
+              title_ids = {
+                  "gb_WA_pro": "link-gb",
+                  "mb_WA": "link-mb",
+                  "delta_WA": "link-delta",
+                  "lite_x_WA": "link-litex",
+              }
               for target in targets:
                   prefix = versioned_titles.get(target)
-                  if not prefix:
+                  title_id = title_ids.get(target)
+                  if not prefix or not title_id:
                       continue
-                  pattern = re.escape(prefix) + r"[^<]*"
-                  html, count = re.subn(pattern, lambda m: prefix + version_suffix, html, count=1)
+                  # Locate the selected product card first so an unrelated title can never be changed.
+                  anchor = re.search(r'<a\\s+id="' + re.escape(title_id) + r'"\\b', html)
+                  if not anchor:
+                      raise SystemExit("Tombol produk tidak ditemukan: " + target)
+                  card_start = html.rfind('<div class="glass-card download-box"', 0, anchor.start())
+                  card_end = html.find("</div>", anchor.end())
+                  if card_start < 0 or card_end < 0:
+                      raise SystemExit("Kartu produk tidak ditemukan: " + target)
+                  card = html[card_start:card_end]
+                  title_pattern = r'(<span\\b[^>]*>)' + re.escape(prefix) + r'[^<]*(</span>)'
+                  updated_card, count = re.subn(title_pattern, lambda m: m.group(1) + prefix + version_suffix + m.group(2), card, count=1)
                   if count != 1:
-                      raise SystemExit("Judul versi tidak ditemukan tepat satu kali untuk target: " + target)
+                      raise SystemExit("Judul versi tidak ditemukan di kartu target: " + target)
+                  html = html[:card_start] + updated_card + html[card_end:]
+                  print("Judul diperbarui:", prefix + version_suffix)
           with open(path, "w", encoding="utf-8") as f:
               f.write(html)
           print("Link diperbarui untuk tombol:", ", ".join(targets))
