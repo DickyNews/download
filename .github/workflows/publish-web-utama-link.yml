@@ -82,20 +82,21 @@ jobs:
                   if not mapping:
                       continue
                   prefix, title_id = mapping
-                  # Match one complete product card, then replace only its title span.
-                  pattern = re.compile(
-                      r'(<div class="glass-card download-box"[^>]*>.*?<span\b[^>]*>)'
-                      r'(.*?)'
-                      r'(</span>.*?<a\b[^>]*\bid="' + re.escape(title_id) + r'"(?=[\s>])[^>]*>.*?</a>.*?</div>)',
-                      re.DOTALL
-                  )
-                  matches = list(pattern.finditer(html))
-                  matches = [m for m in matches if m.group(2).startswith(prefix)]
-                  if len(matches) != 1:
-                      raise SystemExit("Judul versi target tidak ditemukan secara unik: " + target + " (" + str(len(matches)) + " kecocokan)")
-                  match = matches[0]
+                  # Find the exact card by its unique download link ID.
+                  anchor = re.search(r'<a\\b[^>]*\\bid="' + re.escape(title_id) + r'"(?=[\\s>])', html)
+                  if not anchor:
+                      raise SystemExit("Tombol produk tidak ditemukan: " + target)
+                  card_start = html.rfind('<div class="glass-card download-box"', 0, anchor.start())
+                  card_end = html.find("</div>", anchor.end())
+                  if card_start < 0 or card_end < 0:
+                      raise SystemExit("Kartu produk tidak ditemukan: " + target)
+                  card = html[card_start:card_end]
+                  title_pattern = re.compile(r'(<span\\b[^>]*>)' + re.escape(prefix) + r'[^<]*(</span>)')
+                  updated_card, count = title_pattern.subn(lambda m: m.group(1) + prefix + version_suffix + m.group(2), card, count=1)
+                  if count != 1:
+                      raise SystemExit("Judul versi tidak ditemukan di kartu target: " + target)
+                  html = html[:card_start] + updated_card + html[card_end:]
                   new_title = prefix + version_suffix
-                  html = html[:match.start()] + match.group(1) + new_title + match.group(3) + html[match.end():]
                   print("Judul diperbarui:", target, "=>", new_title)
 
           with open(path, "w", encoding="utf-8") as f:
