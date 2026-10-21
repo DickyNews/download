@@ -16,13 +16,19 @@ on:
         type: string
 permissions:
   contents: write
+  pages: write
+  id-token: write
+  deployments: write
 concurrency:
-  group: publish-web-utama-link
+  group: github-pages
   cancel-in-progress: false
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout Web Utama
         uses: actions/checkout@v4
@@ -139,3 +145,12 @@ jobs:
           fi
           git commit -m "Publish Web Utama links and selected versions: ${{ inputs.targets }}"
           git push
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload updated Web Utama
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy updated Web Utama
+        id: deployment
+        uses: actions/deploy-pages@v4
