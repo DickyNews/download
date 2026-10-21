@@ -83,7 +83,7 @@ jobs:
                       continue
                   prefix, title_id = mapping
                   # Find the exact card by its unique download link ID.
-                  anchor = re.search(r'<a\\b[^>]*\\bid="' + re.escape(title_id) + r'"(?=[\\s>])', html)
+                  anchor = re.search(r'<a\b[^>]*\bid="' + re.escape(title_id) + r'"(?=[\s>])', html)
                   if not anchor:
                       raise SystemExit("Tombol produk tidak ditemukan: " + target)
                   card_start = html.rfind('<div class="glass-card download-box"', 0, anchor.start())
@@ -91,7 +91,7 @@ jobs:
                   if card_start < 0 or card_end < 0:
                       raise SystemExit("Kartu produk tidak ditemukan: " + target)
                   card = html[card_start:card_end]
-                  title_pattern = re.compile(r'(<span\\b[^>]*>)' + re.escape(prefix) + r'[^<]*(</span>)')
+                  title_pattern = re.compile(r'(<span\b[^>]*>)' + re.escape(prefix) + r'[^<]*(</span>)')
                   updated_card, count = title_pattern.subn(lambda m: m.group(1) + prefix + version_suffix + m.group(2), card, count=1)
                   if count != 1:
                       raise SystemExit("Judul versi tidak ditemukan di kartu target: " + target)
