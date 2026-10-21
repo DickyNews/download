@@ -85,7 +85,7 @@ jobs:
                   if not prefix or not title_id:
                       continue
                   # Locate the selected product card first so an unrelated title can never be changed.
-                  anchor = re.search(r'<a\s+id="' + re.escape(title_id) + r'"\b', html)
+                  anchor = re.search(r'<a\b[^>]*\bid="' + re.escape(title_id) + r'"(?=[\s>])', html)
                   if not anchor:
                       raise SystemExit("Tombol produk tidak ditemukan: " + target)
                   card_start = html.rfind('<div class="glass-card download-box"', 0, anchor.start())
