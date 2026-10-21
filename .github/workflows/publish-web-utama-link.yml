@@ -10,6 +10,10 @@ on:
         description: Link MediaFire tujuan
         required: true
         type: string
+      version_suffix:
+        description: Ekor versi untuk judul target terpilih, contoh V26.98 (kosongkan jika tidak diubah)
+        required: false
+        type: string
 permissions:
   contents: write
 concurrency:
@@ -25,14 +29,24 @@ jobs:
         env:
           TARGETS: ${{ inputs.targets }}
           MEDIAFIRE_URL: ${{ inputs.mediafire_url }}
+          VERSION_SUFFIX: ${{ inputs.version_suffix }}
         run: |
           python3 - <<'PY'
-          import os, json, base64
+          import os, json, base64, re
           from urllib.parse import urlparse
           path = "index.html"
           targets = [item.strip() for item in os.environ["TARGETS"].split(",") if item.strip()]
           url = os.environ["MEDIAFIRE_URL"].strip()
+          version_suffix = os.environ.get("VERSION_SUFFIX", "").strip()
           allowed = {"gb_WA_pro","mb_WA","delta_WA","lite_x_WA","wa_enhancer_ori","wa_enhancer_biz"}
+          versioned_titles = {
+              "gb_WA_pro": "GB WA PRO TERBARU ",
+              "mb_WA": "MB WA TERBARU ",
+              "delta_WA": "DELTA WA TERBARU ",
+              "lite_x_WA": "LITE X WA TERBARU ",
+          }
+          if version_suffix and not re.fullmatch(r"[A-Za-z0-9._+-]{1,40}", version_suffix):
+              raise SystemExit("Ekor versi tidak valid; gunakan huruf, angka, titik, garis bawah, +, atau -")
           parsed = urlparse(url)
           if not targets or len(set(targets)) != len(targets) or any(t not in allowed for t in targets):
               raise SystemExit("Daftar tombol kosong, duplikat, atau tidak diizinkan")
@@ -58,9 +72,20 @@ jobs:
               lines[i] = indent + target + ": " + json.dumps(generated) + ","
           updated = "\n".join(lines)
           html = html[:start] + updated + html[end:]
+          if version_suffix:
+              for target in targets:
+                  prefix = versioned_titles.get(target)
+                  if not prefix:
+                      continue
+                  pattern = re.escape(prefix) + r"[^<]*"
+                  html, count = re.subn(pattern, lambda m: prefix + version_suffix, html, count=1)
+                  if count != 1:
+                      raise SystemExit("Judul versi tidak ditemukan tepat satu kali untuk target: " + target)
           with open(path, "w", encoding="utf-8") as f:
               f.write(html)
           print("Link diperbarui untuk tombol:", ", ".join(targets))
+          if version_suffix:
+              print("Ekor versi diperbarui untuk target yang memiliki judul versi:", version_suffix)
           PY
       - name: Commit and push
         run: |
