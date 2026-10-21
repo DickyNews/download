@@ -11,12 +11,7 @@
 </head>
 <body>
 
-<section class="social-owner-section" data-aos="fade-up" aria-label="Social Media Owner">
-                <div class="social-owner-heading">SOCIAL MEDIA OWNER</div>
-                <a class="social-owner-link owner-youtube" href="https://www.youtube.com/@dickynews" target="_blank" rel="noopener noreferrer" aria-label="YouTube Dicky News"><i class="fab fa-youtube" aria-hidden="true"></i><span>YouTube : Dicky News</span><span class="owner-arrow" aria-hidden="true">↗</span></a>
-                <a class="social-owner-link owner-tiktok" href="https://www.tiktok.com/@dickynewsyt" target="_blank" rel="noopener noreferrer" aria-label="TikTok Dicky News Method"><i class="fab fa-tiktok" aria-hidden="true"></i><span>TikTok : Dicky News Method</span><span class="owner-arrow" aria-hidden="true">↗</span></a>
-                <a class="social-owner-link owner-instagram" href="https://www.instagram.com/dickynews" target="_blank" rel="noopener noreferrer" aria-label="Instagram Dicky News"><i class="fab fa-instagram" aria-hidden="true"></i><span>Instagram : @dickynews</span><span class="owner-arrow" aria-hidden="true">↗</span></a>
-            </section>
+
 
     <script>
         const LINK_SETTINGS = {
@@ -52,6 +47,13 @@
                     <span class="count-value" id="count" style="font-weight:800; color:var(--primary);">0</span>
                 </div>
             </div>
+
+<section class="social-owner-section" data-aos="fade-up" aria-label="Social Media Owner">
+                <div class="social-owner-heading">SOCIAL MEDIA OWNER</div>
+                <a class="social-owner-link owner-youtube" href="https://www.youtube.com/@dickynews" target="_blank" rel="noopener noreferrer" aria-label="YouTube Dicky News"><i class="fab fa-youtube" aria-hidden="true"></i><span class="owner-label">YouTube : Dicky News <span class="owner-subs">• Subscriber: lihat profil</span></span><span class="owner-arrow" aria-hidden="true">↗</span></a>
+                <a class="social-owner-link owner-tiktok" href="https://www.tiktok.com/@dickynewsyt" target="_blank" rel="noopener noreferrer" aria-label="TikTok Dicky News Method"><i class="fab fa-tiktok" aria-hidden="true"></i><span class="owner-label">TikTok : Dicky News Method <span class="owner-subs">• Followers: lihat profil</span></span><span class="owner-arrow" aria-hidden="true">↗</span></a>
+                <a class="social-owner-link owner-instagram" href="https://www.instagram.com/dickynews" target="_blank" rel="noopener noreferrer" aria-label="Instagram Dicky News"><i class="fab fa-instagram" aria-hidden="true"></i><span class="owner-label">Instagram : @dickynews <span class="owner-subs">• Followers: lihat profil</span></span><span class="owner-arrow" aria-hidden="true">↗</span></a>
+            </section>
 
             <div class="download-list">
 
@@ -165,7 +167,9 @@
         .social-owner-link:hover { transform:translateY(-2px); box-shadow:0 0 20px rgba(0,180,190,.25); }
         .social-owner-link i { flex:0 0 auto; font-size:20px; }
         .owner-youtube i { color:#ff304f; } .owner-tiktok i { color:#111; text-shadow:1px 1px #25f4ee,-1px -1px #fe2c55; } .owner-instagram i { color:#d9469a; }
-        .social-owner-link span:nth-child(2) { min-width:0; overflow-wrap:anywhere; }
+        .social-owner-link .owner-label { min-width:0; overflow-wrap:anywhere; }
+        .owner-subs { display:block; margin-top:3px; font-size:10px; font-weight:600; opacity:.72; }
+
         .owner-arrow { flex:0 0 auto; margin-left:auto; font-size:17px; color:#087f8c; }
         footer { text-align: center; padding: 40px 0; opacity: 0.6; font-size: 11px; width: 100%; }
         @media (max-width: 600px) {
