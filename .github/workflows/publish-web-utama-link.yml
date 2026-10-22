@@ -33,9 +33,24 @@ jobs:
           from urllib.parse import urlparse
 
           try:
-              config = json.loads(os.environ["TARGET_CONFIG"])
+              raw_config = json.loads(os.environ["TARGET_CONFIG"])
           except Exception as exc:
               raise SystemExit("Konfigurasi target bukan JSON valid") from exc
+          if isinstance(raw_config, dict) and "items" in raw_config:
+              mode = str(raw_config.get("mode", "link"))
+              config = raw_config.get("items")
+              youtube_url = str(raw_config.get("youtube_url", "")).strip()
+              password = str(raw_config.get("password", ""))
+          else:
+              mode, config, youtube_url, password = "link", raw_config, "", ""
+          if mode not in {"link", "like"}:
+              raise SystemExit("Mode publikasi tidak dikenal")
+          if mode == "like":
+              yt = urlparse(youtube_url)
+              if yt.scheme != "https" or yt.hostname not in {"youtube.com","www.youtube.com","youtu.be","www.youtu.be"}:
+                  raise SystemExit("URL video YouTube tidak valid")
+              if not password or len(password) > 200:
+                  raise SystemExit("Password unlocker kosong atau terlalu panjang")
           allowed = {"gb_WA_pro","mb_WA","delta_WA","lite_x_WA","wa_enhancer_ori","wa_enhancer_biz"}
           versioned_titles = {
               "gb_WA_pro": ("GB WA PRO TERBARU ", "link-gb"),
@@ -70,8 +85,14 @@ jobs:
               raise SystemExit("LINK_SETTINGS tidak ditemukan; file tidak diubah")
           lines = html[start:end].splitlines()
           for target, item in normalized.items():
-              encoded = base64.urlsafe_b64encode(json.dumps({"url":item["url"]}, separators=(",",":")).encode()).decode().rstrip("=")
-              generated = "https://dickynews.github.io/youtubeadmin/?module=link&v=" + encoded
+              if mode == "like":
+                  unlock_data = {"yt": youtube_url, "ps": password, "url": item["url"]}
+                  module = "like"
+              else:
+                  unlock_data = {"url": item["url"]}
+                  module = "link"
+              encoded = base64.urlsafe_b64encode(json.dumps(unlock_data, separators=(",",":")).encode()).decode().rstrip("=")
+              generated = "https://dickynews.github.io/youtubeadmin/?module=" + module + "&v=" + encoded
               hits = [i for i,line in enumerate(lines) if line.lstrip().startswith(target + ":")]
               if len(hits) != 1:
                   raise SystemExit("Target tidak ditemukan tepat satu kali: " + target)
