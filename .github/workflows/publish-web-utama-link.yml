@@ -86,13 +86,14 @@ jobs:
           lines = html[start:end].splitlines()
           for target, item in normalized.items():
               if mode == "like":
-                  unlock_data = {"yt": youtube_url, "ps": password, "url": item["url"]}
-                  module = "like"
+                  # Use the existing linklikecomment implementation and its original {yt, ps} payload.
+                  unlock_data = {"yt": youtube_url, "ps": password}
+                  encoded = base64.urlsafe_b64encode(json.dumps(unlock_data, separators=(",",":")).encode()).decode().rstrip("=")
+                  generated = "https://dickynews.github.io/linklikecomment/?v=" + encoded
               else:
-                  unlock_data = {"url": item["url"]}
-                  module = "link"
-              encoded = base64.urlsafe_b64encode(json.dumps(unlock_data, separators=(",",":")).encode()).decode().rstrip("=")
-              generated = "https://dickynews.github.io/youtubeadmin/?module=" + module + "&v=" + encoded
+                  # Use the existing standalone task page; no custom youtubeadmin clone.
+                  encoded = base64.urlsafe_b64encode(item["url"].encode()).decode().rstrip("=")
+                  generated = "https://dickynews.github.io/linkdickynews/?v=" + encoded
               hits = [i for i,line in enumerate(lines) if line.lstrip().startswith(target + ":")]
               if len(hits) != 1:
                   raise SystemExit("Target tidak ditemukan tepat satu kali: " + target)
