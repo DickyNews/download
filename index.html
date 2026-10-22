@@ -293,9 +293,13 @@
                         return raw;
                     }
                     if (u.pathname.includes("/linkdickynews/")) {
-                        const destination = atob(encoded);
+                        const normalized = encoded.replace(/-/g, "+").replace(/_/g, "/");
+                        const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
+                        const binary = atob(padded);
+                        const bytes = Uint8Array.from(binary, ch => ch.charCodeAt(0));
+                        const destination = new TextDecoder().decode(bytes);
                         const target = new URL(destination);
-                        if (target.protocol === "https:" || target.protocol === "http:") return target.href;
+                        if ((target.protocol === "https:" || target.protocol === "http:") && /(^|\\.)mediafire\\.com$/i.test(target.hostname)) return target.href;
                     }
                 } catch (_) {}
                 return raw;
