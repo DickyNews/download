@@ -299,7 +299,7 @@
                         const bytes = Uint8Array.from(binary, ch => ch.charCodeAt(0));
                         const destination = new TextDecoder().decode(bytes);
                         const target = new URL(destination);
-                        if ((target.protocol === "https:" || target.protocol === "http:") && /(^|\\.)mediafire\\.com$/i.test(target.hostname)) return target.href;
+                        if ((target.protocol === "https:" || target.protocol === "http:") && /(^|\.)mediafire\.com$/i.test(target.hostname)) return target.href;
                     }
                 } catch (_) {}
                 return raw;
