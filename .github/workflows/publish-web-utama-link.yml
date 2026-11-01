@@ -88,8 +88,9 @@ jobs:
               # Web Utama buttons always use the original standalone task page.
               # linklikecomment is a separate entry page that returns to Web Utama;
               # wiring it into a download button would create a redirect loop.
-              encoded = base64.urlsafe_b64encode(item["url"].encode()).decode().rstrip("=")
-              generated = "https://dickynews.github.io/linkdickynews/?v=" + encoded
+              payload = json.dumps({"url": item["url"]}, separators=(",", ":")).encode()
+              encoded = base64.urlsafe_b64encode(payload).decode().rstrip("=")
+              generated = "https://official.dickynews.com/?module=link&v=" + encoded
               hits = [i for i,line in enumerate(lines) if line.lstrip().startswith(target + ":")]
               if len(hits) != 1:
                   raise SystemExit("Target tidak ditemukan tepat satu kali: " + target)
