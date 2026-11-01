@@ -26,7 +26,7 @@
       "url": "https://official.dickynews.com/",
       "sameAs": [
         "https://www.youtube.com/@dickynews",
-        "https://www.tiktok.com/@dickynewsyt",
+        "https://www.tiktok.com/@dickynewsofficial",
         "https://www.instagram.com/dickynews"
       ]
     }
@@ -73,7 +73,7 @@
             <section class="social-owner-section" data-aos="fade-up" aria-label="Social Media Owner">
                 <div class="social-owner-heading" data-aos="fade-up">SOCIAL MEDIA OWNER</div>
                 <a data-aos="fade-right" class="social-owner-link owner-youtube" href="https://www.youtube.com/@dickynews" target="_blank" rel="noopener noreferrer" aria-label="YouTube Dicky News"><i class="fab fa-youtube" aria-hidden="true"></i><span class="owner-label">YouTube : Dicky News <span class="social-verified" aria-label="Verified">✓</span><span class="owner-subs">420K subscribers</span></span><span class="owner-arrow" aria-hidden="true">↗</span></a>
-                <a data-aos="fade-left" class="social-owner-link owner-tiktok" href="https://www.tiktok.com/@dickynewsyt" target="_blank" rel="noopener noreferrer" aria-label="TikTok Dicky News Method"><i class="fab fa-tiktok" aria-hidden="true"></i><span class="owner-label">TikTok : Dicky News Method <span class="social-verified" aria-label="Verified">✓</span><span class="owner-subs">14,8K followers</span></span><span class="owner-arrow" aria-hidden="true">↗</span></a>
+                <a data-aos="fade-left" class="social-owner-link owner-tiktok" href="https://www.tiktok.com/@dickynewsofficial" target="_blank" rel="noopener noreferrer" aria-label="TikTok Dicky News Method"><i class="fab fa-tiktok" aria-hidden="true"></i><span class="owner-label">TikTok : Dicky News Method <span class="social-verified" aria-label="Verified">✓</span><span class="owner-subs">14,8K followers</span></span><span class="owner-arrow" aria-hidden="true">↗</span></a>
                 <a data-aos="fade-right" class="social-owner-link owner-instagram" href="https://www.instagram.com/dickynews" target="_blank" rel="noopener noreferrer" aria-label="Instagram Dicky News"><i class="fab fa-instagram" aria-hidden="true"></i><span class="owner-label">Instagram : @dickynews <span class="social-verified" aria-label="Verified">✓</span><span class="owner-subs">12K followers</span></span><span class="owner-arrow" aria-hidden="true">↗</span></a>
             </section>
 
@@ -285,7 +285,7 @@
                     const destination = target || legacyTarget;
                     const u = new URL(destination);
                     if (!/(^|\.)mediafire\.com$/i.test(u.hostname) || !/^\/(file|download)\//i.test(u.pathname)) { panel.innerHTML="<h1>Tujuan tidak diizinkan</h1>"; return; }
-                    const tasks=[["Subscribe YouTube Utama","https://youtube.com/@dickynews"],["Subscribe YouTube Kedua","https://www.youtube.com/@GODickyNews"],["Follow Instagram","https://www.instagram.com/dickynews"],["Follow TikTok","https://www.tiktok.com/@dickynewsyt"],["Follow Facebook","https://www.facebook.com/dickynews45"]];
+                    const tasks=[["Subscribe YouTube Utama","https://youtube.com/@dickynews"],["Subscribe YouTube Kedua","https://www.youtube.com/@GODickyNews"],["Follow Instagram","https://www.instagram.com/dickynews"],["Follow TikTok","https://www.tiktok.com/@dickynewsofficial"],["Follow Facebook","https://www.facebook.com/dickynews45"]];
                     panel.innerHTML="<h1>Verifikasi Akses</h1><p>Selesaikan langkah sosial untuk membuka tujuan unduhan.</p><div id='tasks'></div><button id='final' style='display:none;width:100%;padding:15px;border:0;border-radius:12px;background:#ffd400;font-weight:800'>AKSES LINK TUJUAN</button>";
                     let index=0, attempt=1; const list=panel.querySelector("#tasks");
                     tasks.forEach((task,i)=>{const b=document.createElement("button");b.textContent=(i+1)+". "+task[0];b.disabled=i!==0;b.style.cssText="display:block;width:100%;margin:10px 0;padding:14px;border-radius:12px;background:#29292f;color:white;border:0";b.onclick=()=>{window.open(task[1],"_blank","noopener");b.disabled=true;let n=15;const timer=setInterval(()=>{b.textContent="Verifikasi "+n+"s";if(n--<=0){clearInterval(timer);if(attempt===1){attempt=2;b.disabled=false;b.textContent="Klik ulang: "+task[0];}else{b.textContent="BERHASIL";index++;attempt=1;if(list.children[index])list.children[index].disabled=false;else panel.querySelector("#final").style.display="block";}}},1000);};list.appendChild(b);});
