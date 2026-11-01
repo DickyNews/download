@@ -282,7 +282,7 @@
                     if (!target && !legacyTarget) { panel.innerHTML="<h1>Link tidak valid</h1><p>Tujuan unduhan tidak dapat diverifikasi.</p>"; return; }
                     const destination = target || legacyTarget;
                     const u = new URL(destination);
-                    if (!/(^|\\.)mediafire\\.com$/i.test(u.hostname) || !/^\\/(file|download)\\//i.test(u.pathname)) { panel.innerHTML="<h1>Tujuan tidak diizinkan</h1>"; return; }
+                    if (!/(^|\.)mediafire\.com$/i.test(u.hostname) || !/^\/(file|download)\//i.test(u.pathname)) { panel.innerHTML="<h1>Tujuan tidak diizinkan</h1>"; return; }
                     const tasks=[["Subscribe YouTube Utama","https://youtube.com/@dickynews"],["Subscribe YouTube Kedua","https://www.youtube.com/@GODickyNews"],["Follow Instagram","https://www.instagram.com/dickynews"],["Follow TikTok","https://www.tiktok.com/@dickynewsyt"],["Follow Facebook","https://www.facebook.com/dickynews45"]];
                     panel.innerHTML="<h1>Verifikasi Akses</h1><p>Selesaikan langkah sosial untuk membuka tujuan unduhan.</p><div id='tasks'></div><button id='final' style='display:none;width:100%;padding:15px;border:0;border-radius:12px;background:#ffd400;font-weight:800'>AKSES LINK TUJUAN</button>";
                     let index=0, attempt=1; const list=panel.querySelector("#tasks");
@@ -292,7 +292,7 @@
                 }
                 if (routeModule === "like") {
                     const yt=safeUrl(payload && payload.yt), password=String(payload && payload.ps || "");
-                    if(!yt || !/^https:\\/\\/(?:www\\.)?(?:youtube\\.com|youtu\\.be)\\//i.test(yt) || !password){panel.innerHTML="<h1>Data unlocker tidak valid</h1>";return;}
+                    if(!yt || !/^https:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//i.test(yt) || !password){panel.innerHTML="<h1>Data unlocker tidak valid</h1>";return;}
                     panel.innerHTML="<h1>Unlock Access</h1><p>Pilih akses VIP dengan password atau jalur Like & Comment.</p><input id='pw' type='password' placeholder='Masukkan password unlocker' style='width:100%;padding:14px;box-sizing:border-box'><button id='vip' style='width:100%;padding:14px;margin-top:10px'>UNLOCK DENGAN PASSWORD</button><p style='text-align:center'>ATAU</p><button id='task' style='width:100%;padding:14px'>UNLOCK DENGAN LIKE & COMMENT</button><p class='status'></p>";
                     panel.querySelector("#vip").onclick=()=>{if(panel.querySelector("#pw").value===password){localStorage.setItem("dickynews_download_unlock_until",String(Date.now()+8*60*60*1000));location.href="https://official.dickynews.com/?method=bypass";}else setStatus("Password salah. Silakan coba lagi.");};
                     let attempt=1;panel.querySelector("#task").onclick=()=>{const b=panel.querySelector("#task");window.open(yt,"_blank","noopener");b.disabled=true;let n=15;const timer=setInterval(()=>{b.textContent="Verifikasi "+n+"s";if(n--<=0){clearInterval(timer);if(attempt===1){attempt=2;b.disabled=false;b.textContent="KLIK ULANG UNTUK LIKE & COMMENT";setStatus("Selesaikan tugas di video, lalu klik ulang.");}else{localStorage.setItem("dickynews_download_unlock_until",String(Date.now()+8*60*60*1000));location.href="https://official.dickynews.com/";}}},1000);};
@@ -314,7 +314,8 @@
             const adminDirect = urlParams.get("admin_direct") === "1" &&
                 Number(localStorage.getItem("dickynews_admin_direct_until") || 0) > Date.now();
 
-            const unlockUntil = Number(localStorage.getItem("dickynews_download_unlock_until") || 0);\n            const allowedEntry = (!!referrer && (referrer.includes("dickynews.github.io/youtubeadmin") || referrer.includes("official.dickynews.com"))) || unlockUntil > Date.now() || method === "bypass";\n            if (method === "bypass") localStorage.setItem("dickynews_download_unlock_until", String(Date.now() + 8 * 60 * 60 * 1000));
+            const unlockUntil = Number(localStorage.getItem("dickynews_download_unlock_until") || 0);
+            const allowedEntry = (!!referrer && (referrer.includes("dickynews.github.io/youtubeadmin") || referrer.includes("official.dickynews.com"))) || unlockUntil > Date.now() || method === "bypass";\n            if (method === "bypass") localStorage.setItem("dickynews_download_unlock_until", String(Date.now() + 8 * 60 * 60 * 1000));
             document.querySelectorAll('.download-list .target-link').forEach((button) => {
                 button.addEventListener('click', (event) => {
                     if (!allowedEntry && !adminDirect) {
