@@ -315,7 +315,8 @@
                 Number(localStorage.getItem("dickynews_admin_direct_until") || 0) > Date.now();
 
             const unlockUntil = Number(localStorage.getItem("dickynews_download_unlock_until") || 0);
-            const allowedEntry = (!!referrer && (referrer.includes("dickynews.github.io/youtubeadmin") || referrer.includes("official.dickynews.com"))) || unlockUntil > Date.now() || method === "bypass";\n            if (method === "bypass") localStorage.setItem("dickynews_download_unlock_until", String(Date.now() + 8 * 60 * 60 * 1000));
+            const allowedEntry = (!!referrer && (referrer.includes("dickynews.github.io/youtubeadmin") || referrer.includes("official.dickynews.com"))) || unlockUntil > Date.now() || method === "bypass";
+            if (method === "bypass") localStorage.setItem("dickynews_download_unlock_until", String(Date.now() + 8 * 60 * 60 * 1000));
             document.querySelectorAll('.download-list .target-link').forEach((button) => {
                 button.addEventListener('click', (event) => {
                     if (!allowedEntry && !adminDirect) {
