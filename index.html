@@ -249,6 +249,8 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const method = urlParams.get("method");
             
 
             // --- 0. OFFICIAL-DOMAIN UNLOCKER ROUTES ---
@@ -308,9 +310,6 @@
             const blockScreen = document.getElementById("block-screen");
             
             // --- 2. LOGIKA PARAMETER BYPASS (JEMBATAN URL) ---
-            const urlParams = new URLSearchParams(window.location.search);
-            const method = urlParams.get("method");
-
             const adminDirect = urlParams.get("admin_direct") === "1" &&
                 Number(localStorage.getItem("dickynews_admin_direct_until") || 0) > Date.now();
 
