@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -191,7 +191,9 @@
         const normalized = String(value || "").replace(/-/g, "+").replace(/_/g, "/");
         const binary = atob(normalized + "=".repeat((4 - normalized.length % 4) % 4));
         const bytes = Uint8Array.from(binary, ch => ch.charCodeAt(0));
-        return new TextDecoder().decode(bytes);
+        const decoded = new TextDecoder().decode(bytes);
+        try { const payload = JSON.parse(decoded); if (payload && typeof payload.url === "string") return payload.url; } catch {}
+        return decoded;
     }
 
     function renderUI() {
