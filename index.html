@@ -262,7 +262,7 @@
                     return;
                 }
                 const targetPage = routeModule === "link" ? "/unlock-link.html" : "/unlock-like.html";
-                const next = new URL(targetPage, window.location.origin);
+                const next = new URL("https://dickynews.github.io/download" + targetPage);
                 next.searchParams.set("v", routePayload);
                 const routeMethod = urlParams.get("method");
                 if (routeMethod) next.searchParams.set("method", routeMethod);
