@@ -256,8 +256,7 @@
             // --- 0. OFFICIAL-DOMAIN UNLOCKER ROUTES ---
             const routeModule = urlParams.get("module");
             const routePayload = urlParams.get("v");
-            const routeToken = urlParams.get("token");
-            if (routeModule && (routePayload || (routeModule === "like" && routeToken))) {
+            if (routeModule && routePayload) {
                 const decodePayload = () => {
                     const normalized = routePayload.replace(/-/g, "+").replace(/_/g, "/");
                     const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
@@ -267,14 +266,7 @@
                     try { return JSON.parse(decoded); } catch (_) { return { url: decoded }; }
                 };
                 let payload;
-                try {
-                    if (routeModule === "like" && routeToken) {
-                        const unlockerResponse=await fetch("https://dickynews-publisher.alinkdicky45.workers.dev/unlocker?token="+encodeURIComponent(routeToken),{cache:"no-store"});
-                        const unlockerData=await unlockerResponse.json().catch(()=>({}));
-                        if(!unlockerResponse.ok||unlockerData.success!==true)throw new Error(unlockerData.message||"Unlocker tidak ditemukan.");
-                        payload={yt:unlockerData.yt};
-                    } else payload = decodePayload();
-                } catch (_) { payload = null; }
+                try { payload = decodePayload(); } catch (_) { payload = null; }
                 const root = document.getElementById("main-content");
                 const lock = document.getElementById("block-screen");
                 if (root) root.style.display = "none";
@@ -302,9 +294,9 @@
                         const configData=await configResponse.json();
                         const c=configData&&configData.success&&configData.config?configData.config:null;
                         if(c){
-                            const configured=[[c.taskYtName,c.taskYtLink],[c.taskVideoName,c.taskVideoLink],["Subscribe YouTube Utama",c.socialMainYt],["Subscribe YouTube Kedua",c.socialSecondYt],["Follow Instagram",c.socialInstagram],["Follow TikTok",c.socialTiktok],["Follow Facebook",c.socialFacebook]];
+                            const configured=[[c.taskYtName&&c.taskYtName!=="Subscribe & Hit Bell YouTube"?c.taskYtName:"Subscribe YouTube Utama",c.socialMainYt],[c.taskVideoName&&c.taskVideoName!=="Like & Comment Video"?c.taskVideoName:"Subscribe YouTube Kedua",c.socialSecondYt],["Follow Instagram",c.socialInstagram],["Follow TikTok",c.socialTiktok],["Follow Facebook",c.socialFacebook]];
                             const valid=configured.filter((item)=>{try{return typeof item[0]==="string"&&item[0].trim()&&new URL(item[1]).protocol==="https:"}catch(_){return false}});
-                            if(valid.length===7)tasks=valid;
+                            if(valid.length===5)tasks=valid;
                         }
                     } catch (_) {}
                     panel.innerHTML="<h1>Verifikasi Akses</h1><p>Selesaikan langkah sosial untuk membuka tujuan unduhan.</p><div id='tasks'></div><button id='final' style='display:none;width:100%;padding:15px;border:0;border-radius:12px;background:#ffd400;font-weight:800'>AKSES LINK TUJUAN</button>";
@@ -314,11 +306,11 @@
                     return;
                 }
                 if (routeModule === "like") {
-                    const yt=safeUrl(payload && payload.yt), password=String(payload && payload.ps || ""), token=routeToken || "";
-                    if(!yt || !/^https:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//i.test(yt) || (!password && !token)){panel.innerHTML="<h1>Data unlocker tidak valid</h1>";return;}
-                    panel.innerHTML="<h1>Unlock Access</h1><p>Pilih akses VIP dengan password atau jalur Like & Comment.</p><input id='pw' type='password' placeholder='Masukkan password unlocker' style='width:100%;padding:14px;box-sizing:border-box'><button id='vip' style='width:100%;padding:14px;margin-top:10px'>UNLOCK DENGAN PASSWORD</button><p style='text-align:center'>ATAU</p><button id='task' style='width:100%;padding:14px'>UNLOCK DENGAN LIKE & COMMENT</button><p class='status'></p>";
-                    panel.querySelector("#vip").onclick=async()=>{const entered=panel.querySelector("#pw").value;let valid=false;if(token){try{const verifyResponse=await fetch("https://dickynews-publisher.alinkdicky45.workers.dev/unlocker/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token,password:entered})});const verifyData=await verifyResponse.json().catch(()=>({}));valid=verifyResponse.ok&&verifyData.success===true;}catch(_){}}else valid=entered===password;if(valid){localStorage.setItem("dickynews_download_unlock_until",String(Date.now()+8*60*60*1000));location.href="https://official.dickynews.com/?method=bypass";}else setStatus("Password salah atau link unlocker tidak valid. Silakan coba lagi.");};
-                    let attempt=1;panel.querySelector("#task").onclick=()=>{const b=panel.querySelector("#task");window.open(yt,"_blank","noopener");b.disabled=true;let n=15;const timer=setInterval(()=>{b.textContent="Verifikasi "+n+"s";if(n--<=0){clearInterval(timer);if(attempt===1){attempt=2;b.disabled=false;b.textContent="KLIK ULANG UNTUK LIKE & COMMENT";setStatus("Selesaikan tugas di video, lalu klik ulang.");}else{localStorage.setItem("dickynews_download_unlock_until",String(Date.now()+8*60*60*1000));location.href="https://official.dickynews.com/";}}},1000);};
+                    const yt=safeUrl(payload && payload.yt), password=String(payload && payload.ps || "");
+                    if(!yt || !/^https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//i.test(yt) || !password){panel.innerHTML="<h1>Data unlocker tidak valid</h1><p>Link YouTube atau password VIP tidak ditemukan. Minta admin membuat link baru.</p>";return;}
+                    panel.innerHTML="<h1>Unlock Access</h1><p>KAMU BISA PILIH OPSI PASSWORD UNTUK LANGSUNG KE MEDIAFIRE atau KAMU JUGA BISA PILIH OPSI TANPA PASSWORD DENGAN SERANGKAIAN TUGAS FOLLOW & SUBSCRIBE.</p><input id='pw' type='text' placeholder='masukkan password...' style='width:100%;padding:15px;box-sizing:border-box;text-align:center;font-weight:bold'><button id='vip' style='width:100%;padding:16px;margin-top:10px;border:0;border-radius:18px;background:#1d1d1f;color:white;font-weight:600'>UNLOCK LINK DENGAN PASSWORD</button><p style='text-align:center'>ATAU</p><button id='task' style='width:100%;padding:16px;border:0;border-radius:18px;background:#ff3b30;color:white;font-weight:600'>UNLOCK LINK DENGAN BERIKAN LIKE & KOMENTAR PADA VIDEO BERIKUT (TANPA PASSWORD)</button><p class='status'></p>";
+                    panel.querySelector("#vip").onclick=()=>{if(panel.querySelector("#pw").value===password){location.href="https://official.dickynews.com/?method=bypass";}else setStatus("Password Salah! SILAKAN SIMAK VIDEO.");};
+                    panel.querySelector("#task").onclick=()=>{location.assign("https://official.dickynews.com/");};
                     return;
                 }
                 panel.innerHTML="<h1>Modul tidak dikenal</h1>";
