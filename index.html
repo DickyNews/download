@@ -292,7 +292,9 @@
                     if (!target && !legacyTarget) { panel.innerHTML="<h1>Link tidak valid</h1><p>Tujuan unduhan tidak dapat diverifikasi.</p>"; return; }
                     const destination = target || legacyTarget;
                     const u = new URL(destination);
-                    if (!/(^|\.)mediafire\.com$/i.test(u.hostname) || !/^\/(file|download)\//i.test(u.pathname)) { panel.innerHTML="<h1>Tujuan tidak diizinkan</h1>"; return; }
+                    const isMediaFire=/(^|\.)mediafire\.com$/i.test(u.hostname)&&/^\/(file|download)\//i.test(u.pathname);
+                    const isEnhancerRepo=u.hostname==="github.com"&&u.pathname.replace(/\/$/,"")==="/Dev4Mod/waenhancer";
+                    if (!isMediaFire && !isEnhancerRepo) { panel.innerHTML="<h1>Tujuan tidak diizinkan</h1>"; return; }
                     const fallbackTasks=[["Subscribe YouTube Utama","https://youtube.com/@dickynews"],["Subscribe YouTube Kedua","https://www.youtube.com/@GODickyNews"],["Follow Instagram","https://www.instagram.com/dickynews"],["Follow TikTok","https://www.tiktok.com/@dickynewsofficial"],["Follow Facebook","https://www.facebook.com/dickynews45"]];
                     let tasks=fallbackTasks;
                     try {
@@ -369,7 +371,9 @@
                         const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
                         const data = JSON.parse(atob(padded));
                         const destination = new URL(data.url);
-                        if (destination.protocol === "https:" && /(^|\.)mediafire\.com$/i.test(destination.hostname)) return destination.href;
+                        const isMediaFire=destination.protocol==="https:"&&/(^|\.)mediafire\.com$/i.test(destination.hostname)&&/^\/(file|download)\//i.test(destination.pathname);
+                        const isEnhancerRepo=destination.protocol==="https:"&&destination.hostname==="github.com"&&destination.pathname.replace(/\/$/,"")==="/Dev4Mod/waenhancer";
+                        if (isMediaFire || isEnhancerRepo) return destination.href;
                         return raw;
                     }
                     if (u.pathname.includes("/linkdickynews/")) {

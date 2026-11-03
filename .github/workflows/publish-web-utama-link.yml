@@ -67,8 +67,10 @@ jobs:
               url = str(item.get("mediafire_url", "")).strip()
               suffix = str(item.get("version_suffix", "")).strip()
               parsed = urlparse(url)
-              if parsed.scheme != "https" or parsed.hostname not in {"mediafire.com","www.mediafire.com"} or not parsed.path.startswith(("/file/","/download/")):
-                  raise SystemExit("URL MediaFire tidak valid untuk " + target)
+              is_mediafire = parsed.scheme == "https" and parsed.hostname in {"mediafire.com","www.mediafire.com"} and parsed.path.startswith(("/file/","/download/"))
+              is_enhancer_repo = target in {"wa_enhancer_ori","wa_enhancer_biz"} and parsed.scheme == "https" and parsed.hostname == "github.com" and parsed.path.rstrip("/") == "/Dev4Mod/waenhancer"
+              if not (is_mediafire or is_enhancer_repo):
+                  raise SystemExit("URL tujuan tidak valid untuk " + target)
               if suffix and not re.fullmatch(r"[vV]?[0-9]+(?:[._+-][0-9A-Za-z]+)*", suffix):
                   raise SystemExit("Versi tidak valid untuk " + target)
               if suffix and not suffix.upper().startswith("V"):
