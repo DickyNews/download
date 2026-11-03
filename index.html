@@ -256,7 +256,8 @@
             // --- 0. OFFICIAL-DOMAIN UNLOCKER ROUTES ---
             const routeModule = urlParams.get("module");
             const routePayload = urlParams.get("v");
-            if (routeModule && routePayload) {
+            const routeToken = urlParams.get("token");
+            if (routeModule && (routePayload || (routeModule === "like" && routeToken))) {
                 const decodePayload = () => {
                     const normalized = routePayload.replace(/-/g, "+").replace(/_/g, "/");
                     const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
@@ -266,7 +267,14 @@
                     try { return JSON.parse(decoded); } catch (_) { return { url: decoded }; }
                 };
                 let payload;
-                try { payload = decodePayload(); } catch (_) { payload = null; }
+                try {
+                    if (routeModule === "like" && routeToken) {
+                        const unlockerResponse=await fetch("https://dickynews-publisher.alinkdicky45.workers.dev/unlocker?token="+encodeURIComponent(routeToken),{cache:"no-store"});
+                        const unlockerData=await unlockerResponse.json().catch(()=>({}));
+                        if(!unlockerResponse.ok||unlockerData.success!==true)throw new Error(unlockerData.message||"Unlocker tidak ditemukan.");
+                        payload={yt:unlockerData.yt};
+                    } else payload = decodePayload();
+                } catch (_) { payload = null; }
                 const root = document.getElementById("main-content");
                 const lock = document.getElementById("block-screen");
                 if (root) root.style.display = "none";
@@ -304,10 +312,10 @@
                     return;
                 }
                 if (routeModule === "like") {
-                    const yt=safeUrl(payload && payload.yt), password=String(payload && payload.ps || "");
-                    if(!yt || !/^https:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//i.test(yt) || !password){panel.innerHTML="<h1>Data unlocker tidak valid</h1>";return;}
+                    const yt=safeUrl(payload && payload.yt), password=String(payload && payload.ps || ""), token=routeToken || "";
+                    if(!yt || !/^https:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//i.test(yt) || (!password && !token)){panel.innerHTML="<h1>Data unlocker tidak valid</h1>";return;}
                     panel.innerHTML="<h1>Unlock Access</h1><p>Pilih akses VIP dengan password atau jalur Like & Comment.</p><input id='pw' type='password' placeholder='Masukkan password unlocker' style='width:100%;padding:14px;box-sizing:border-box'><button id='vip' style='width:100%;padding:14px;margin-top:10px'>UNLOCK DENGAN PASSWORD</button><p style='text-align:center'>ATAU</p><button id='task' style='width:100%;padding:14px'>UNLOCK DENGAN LIKE & COMMENT</button><p class='status'></p>";
-                    panel.querySelector("#vip").onclick=()=>{if(panel.querySelector("#pw").value===password){localStorage.setItem("dickynews_download_unlock_until",String(Date.now()+8*60*60*1000));location.href="https://official.dickynews.com/?method=bypass";}else setStatus("Password salah. Silakan coba lagi.");};
+                    panel.querySelector("#vip").onclick=async()=>{const entered=panel.querySelector("#pw").value;let valid=false;if(token){try{const verifyResponse=await fetch("https://dickynews-publisher.alinkdicky45.workers.dev/unlocker/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token,password:entered})});const verifyData=await verifyResponse.json().catch(()=>({}));valid=verifyResponse.ok&&verifyData.success===true;}catch(_){}}else valid=entered===password;if(valid){localStorage.setItem("dickynews_download_unlock_until",String(Date.now()+8*60*60*1000));location.href="https://official.dickynews.com/?method=bypass";}else setStatus("Password salah atau link unlocker tidak valid. Silakan coba lagi.");};
                     let attempt=1;panel.querySelector("#task").onclick=()=>{const b=panel.querySelector("#task");window.open(yt,"_blank","noopener");b.disabled=true;let n=15;const timer=setInterval(()=>{b.textContent="Verifikasi "+n+"s";if(n--<=0){clearInterval(timer);if(attempt===1){attempt=2;b.disabled=false;b.textContent="KLIK ULANG UNTUK LIKE & COMMENT";setStatus("Selesaikan tugas di video, lalu klik ulang.");}else{localStorage.setItem("dickynews_download_unlock_until",String(Date.now()+8*60*60*1000));location.href="https://official.dickynews.com/";}}},1000);};
                     return;
                 }
