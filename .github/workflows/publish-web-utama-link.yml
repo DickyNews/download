@@ -1,4 +1,5 @@
 name: Publish Web Utama Link
+run-name: Publish Web Utama Link · ${{ fromJSON(inputs.target_config).request_id }}
 on:
   workflow_dispatch:
     inputs:
