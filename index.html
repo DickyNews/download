@@ -302,9 +302,9 @@
                         const configData=await configResponse.json();
                         const c=configData&&configData.success&&configData.config?configData.config:null;
                         if(c){
-                            const configured=[["Subscribe YouTube Utama",c.socialMainYt],["Subscribe YouTube Kedua",c.socialSecondYt],["Follow Instagram",c.socialInstagram],["Follow TikTok",c.socialTiktok],["Follow Facebook",c.socialFacebook]];
-                            const valid=configured.filter((item)=>{try{return new URL(item[1]).protocol==="https:"}catch(_){return false}});
-                            if(valid.length===5)tasks=valid;
+                            const configured=[[c.taskYtName,c.taskYtLink],[c.taskVideoName,c.taskVideoLink],["Subscribe YouTube Utama",c.socialMainYt],["Subscribe YouTube Kedua",c.socialSecondYt],["Follow Instagram",c.socialInstagram],["Follow TikTok",c.socialTiktok],["Follow Facebook",c.socialFacebook]];
+                            const valid=configured.filter((item)=>{try{return typeof item[0]==="string"&&item[0].trim()&&new URL(item[1]).protocol==="https:"}catch(_){return false}});
+                            if(valid.length===7)tasks=valid;
                         }
                     } catch (_) {}
                     panel.innerHTML="<h1>Verifikasi Akses</h1><p>Selesaikan langkah sosial untuk membuka tujuan unduhan.</p><div id='tasks'></div><button id='final' style='display:none;width:100%;padding:15px;border:0;border-radius:12px;background:#ffd400;font-weight:800'>AKSES LINK TUJUAN</button>";
