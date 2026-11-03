@@ -38,20 +38,9 @@ jobs:
           except Exception as exc:
               raise SystemExit("Konfigurasi target bukan JSON valid") from exc
           if isinstance(raw_config, dict) and "items" in raw_config:
-              mode = str(raw_config.get("mode", "link"))
               config = raw_config.get("items")
-              youtube_url = str(raw_config.get("youtube_url", "")).strip()
-              password = str(raw_config.get("password", ""))
           else:
-              mode, config, youtube_url, password = "link", raw_config, "", ""
-          if mode not in {"link", "like"}:
-              raise SystemExit("Mode publikasi tidak dikenal")
-          if mode == "like":
-              yt = urlparse(youtube_url)
-              if yt.scheme != "https" or yt.hostname not in {"youtube.com","www.youtube.com","youtu.be","www.youtu.be"}:
-                  raise SystemExit("URL video YouTube tidak valid")
-              if not password or len(password) > 200:
-                  raise SystemExit("Password unlocker kosong atau terlalu panjang")
+              config = raw_config
           allowed = {"gb_WA_pro","mb_WA","delta_WA","lite_x_WA","wa_enhancer_ori","wa_enhancer_biz"}
           versioned_titles = {
               "gb_WA_pro": ("GB WA PRO TERBARU ", "link-gb"),
