@@ -287,6 +287,11 @@
                     const isMediaFire=/(^|\.)mediafire\.com$/i.test(u.hostname)&&/^\/(file|download)\//i.test(u.pathname);
                     const isEnhancerRepo=u.hostname==="github.com"&&u.pathname.replace(/\/$/,"")==="/Dev4Mod/waenhancer";
                     if (!isMediaFire && !isEnhancerRepo) { panel.innerHTML="<h1>Tujuan tidak diizinkan</h1>"; return; }
+                    if (method === "bypass") {
+                        panel.innerHTML="<h1>AKSES TERBUKA</h1><p>Password VIP benar. Langkah sosial dilewati. Klik tombol di bawah untuk membuka tujuan download.</p><button id='direct' style='width:100%;padding:15px;border:0;border-radius:12px;background:#ffd400;color:#111;font-weight:800'>AKSES LINK TUJUAN</button>";
+                        panel.querySelector("#direct").onclick=()=>{location.href=destination;};
+                        return;
+                    }
                     const fallbackTasks=[["Subscribe YouTube Utama","https://youtube.com/@dickynews"],["Subscribe YouTube Kedua","https://www.youtube.com/@GODickyNews"],["Follow Instagram","https://www.instagram.com/dickynews"],["Follow TikTok","https://www.tiktok.com/@dickynewsofficial"],["Follow Facebook","https://www.facebook.com/dickynews45"]];
                     let tasks=fallbackTasks;
                     try {
@@ -306,8 +311,9 @@
                     return;
                 }
                 if (routeModule === "like") {
-                    const yt=safeUrl(payload && payload.yt), password=String(payload && payload.ps || "");
-                    if(!yt || !/^https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//i.test(yt) || !password){panel.innerHTML="<h1>Data unlocker tidak valid</h1><p>Link YouTube atau password VIP tidak ditemukan. Minta admin membuat link baru.</p>";return;}
+                    let yt=""; try { const parsed=new URL(String(payload && payload.yt || "")); if(["http:","https:"].includes(parsed.protocol) && ["youtube.com","www.youtube.com","m.youtube.com","youtu.be","www.youtu.be"].includes(parsed.hostname)) yt=parsed.href; } catch (_) {}
+                    const password=String(payload && payload.ps || "");
+                    if(!yt || !password){panel.innerHTML="<h1>Data unlocker tidak valid</h1><p>Link YouTube atau password VIP tidak ditemukan. Minta admin membuat link baru.</p>";return;}
                     panel.innerHTML="<h1>Unlock Access</h1><p>KAMU BISA PILIH OPSI PASSWORD UNTUK LANGSUNG KE MEDIAFIRE atau KAMU JUGA BISA PILIH OPSI TANPA PASSWORD DENGAN SERANGKAIAN TUGAS FOLLOW & SUBSCRIBE.</p><input id='pw' type='text' placeholder='masukkan password...' style='width:100%;padding:15px;box-sizing:border-box;text-align:center;font-weight:bold'><button id='vip' style='width:100%;padding:16px;margin-top:10px;border:0;border-radius:18px;background:#1d1d1f;color:white;font-weight:600'>UNLOCK LINK DENGAN PASSWORD</button><p style='text-align:center'>ATAU</p><button id='task' style='width:100%;padding:16px;border:0;border-radius:18px;background:#ff3b30;color:white;font-weight:600'>UNLOCK LINK DENGAN BERIKAN LIKE & KOMENTAR PADA VIDEO BERIKUT (TANPA PASSWORD)</button><p class='status'></p>";
                     panel.querySelector("#vip").onclick=()=>{if(panel.querySelector("#pw").value===password){location.href="https://official.dickynews.com/?method=bypass";}else setStatus("Password Salah! SILAKAN SIMAK VIDEO.");};
                     panel.querySelector("#task").onclick=()=>{location.assign("https://official.dickynews.com/");};
