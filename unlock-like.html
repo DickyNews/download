@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dicky News | WEB 3</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --accent: #007AFF; 
+            --yt-red: #FF3B30; 
+            --success: #34C759; 
+            --text: #1d1d1f;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; color: var(--text);
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+        }
+
+        #space-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+
+        .card {
+            width: 90%; max-width: 380px;
+            background: var(--glass);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            padding: 40px 25px; border-radius: 35px;
+            border: 1px solid var(--glass-border); text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            animation: floating 6s ease-in-out infinite; z-index: 10;
+        }
+
+        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+
+        .icon-wrapper {
+            width: 80px; height: 80px; background: white; border-radius: 22px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            font-size: 40px; color: var(--yt-red); animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 59, 48, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
+
+        h2 { font-size: 22px; font-weight: 700; margin: 10px 0; }
+        p.desc { font-size: 14px; color: #444; line-height: 1.5; margin-bottom: 25px; }
+
+        .btn {
+            width: 100%; padding: 16px; border-radius: 18px; border: none;
+            font-weight: 600; font-size: 13px; cursor: pointer;
+            transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+            text-transform: uppercase; margin-bottom: 12px;
+        }
+
+        .btn:active { transform: scale(0.95); }
+        .btn-black { background: var(--text); color: white; }
+        .btn-red { background: var(--yt-red); color: white; }
+        .btn-waiting { background: rgba(0,0,0,0.1); color: #666; cursor: wait; }
+        .btn-success { background: var(--success); color: white; }
+
+        input {
+            width: 100%; padding: 15px; border-radius: 15px; border: 1px solid rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.5); margin-bottom: 15px; font-size: 14px; outline: none;
+            text-align: center; font-weight: bold;
+        }
+
+        .divider { margin: 15px 0; font-size: 12px; color: #888; display: flex; align-items: center; }
+        .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #ccc; margin: 0 10px; }
+
+        #statusMsg { font-size: 13px; margin-top: 15px; font-weight: 500; }
+        #resultArea { margin-top: 20px; padding: 15px; background: white; border-radius: 12px; font-size: 11px; word-break: break-all; border: 1px dashed #ccc; cursor: copy; }
+    </style>
+</head>
+<body>
+
+<canvas id="space-canvas"></canvas>
+<div class="card" id="card"></div>
+
+<script>
+    // --- SPACE BACKGROUND ENGINE ---
+    const canvas = document.getElementById('space-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function initCanvas() {
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        particles = []; for (let i = 0; i < 100; i++) {
+            particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, radius: Math.random() * 2, speed: Math.random() * 0.5 + 0.1 });
+        }
+    }
+    function drawParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill(); p.y -= p.speed; if (p.y < 0) p.y = canvas.height; });
+        requestAnimationFrame(drawParticles);
+    }
+    window.addEventListener('resize', initCanvas); initCanvas(); drawParticles();
+
+    // --- LOGIC ---
+    const params = new URLSearchParams(window.location.search);
+    const box = document.getElementById('card');
+    
+    // GANTI DENGAN LINK WEB 1 KAMU
+    const WEB_1_URL = "https://official.dickynews.com/"; 
+    
+    let attempt = 1;
+
+    // 1. GENERATOR MODE (DICKY ADMIN)
+    if (!params.get("v")) {
+        box.innerHTML = `
+            <h2>Dicky Generator</h2>
+            <p class="desc">Buat link akses khusus video YouTube baru.</p>
+            <input type="url" id="ytInp" placeholder="Link Video YouTube...">
+            <input type="text" id="passInp" placeholder="Set Password VIP">
+            <button class="btn btn-black" onclick="generate()">Generate Link</button>
+            <div id="resultArea" style="display:none" onclick="copy()"></div>
+        `;
+        window.generate = () => {
+            const yt = document.getElementById('ytInp').value.trim();
+            const ps = document.getElementById('passInp').value;
+            if(!yt || !ps) return alert("Harap isi link video YouTube dan password!");
+            let ytUrl;
+            try { ytUrl = new URL(yt); }
+            catch (_) { return alert("Periksa kembali format link YouTube."); }
+            if(!["https:", "http:"].includes(ytUrl.protocol)) return alert("Link YouTube harus menggunakan HTTP atau HTTPS.");
+            const bytes = new TextEncoder().encode(JSON.stringify({yt: ytUrl.href, ps}));
+            let binary = "";
+            bytes.forEach(byte => binary += String.fromCharCode(byte));
+            const encoded = btoa(binary).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+            document.getElementById('resultArea').innerText = window.location.origin + window.location.pathname + "?v=" + encoded;
+            document.getElementById('resultArea').style.display = 'block';
+        }
+        window.copy = () => { navigator.clipboard.writeText(document.getElementById('resultArea').innerText); alert("Link Berhasil Disalin!"); }
+    } 
+    // 2. USER MODE (PILIH OPSI)
+    else {
+        let data;
+        try {
+            const raw = params.get("v").replace(/-/g, '+').replace(/_/g, '/');
+            const binary = atob(raw + "=".repeat((4 - raw.length % 4) % 4));
+            const bytes = Uint8Array.from(binary, ch => ch.charCodeAt(0));
+            data = JSON.parse(new TextDecoder().decode(bytes));
+        } catch (_) {
+            box.innerHTML = "<h2>Link tidak valid</h2><p class='desc'>Format link ini rusak. Minta pembuat link membuat ulang link unlocker.</p>";
+            data = {};
+        }
+        
+        box.innerHTML = `
+            <div class="icon-wrapper"><i class="fas fa-lock"></i></div>
+            <h2>Unlock Access</h2>
+            <p class="desc">KAMU BISA PILIH OPSI PASSWORD UNTUK LANGSUNG KE MEDIAFIRE atau KAMU JUGA BISA PILIH OPSI TANPA PASSWORD DENGAN SERANGKAIAN TUGAS FOLLOW & SUBSCRIBE</p>
+            
+            <div id="mainUI">
+                <input type="text" id="inputPass" placeholder="masukkan password...">
+                <button class="btn btn-black" onclick="checkPassword()">UNLOCK LINK DENGAN PASSWORD</button>
+                
+                <div class="divider">ATAU</div>
+                
+                <button id="btnTask" class="btn btn-red">UNLOCK LINK DENGAN BERIKAN LIKE & KOMENTAR PADA VIDEO BERIKUT (TANPA PASSWORD)</button>
+            </div>
+            <div id="statusMsg"></div>
+        `;
+        // Jalur merah: langsung ke Web Utama. Tugas hanya muncul setelah tombol DOWNLOAD diklik di Web Utama.
+        document.getElementById('btnTask').addEventListener('click', function () {
+            window.location.assign(WEB_1_URL);
+        });
+
+        // Logika Jalur Password (VIP)
+        window.checkPassword = () => {
+            const input = document.getElementById('inputPass').value;
+            if(input === data.ps) {
+                goDestination("bypass");
+            } else {
+                alert("Password Salah! SILAKAN SIMAK VIDEO.");
+            }
+        }
+
+        // Logika Jalur Tugas (Normal)
+        function goDestination(mode) {
+            // Kedua jalur kembali ke Web Utama. Password memakai mode bypass;
+            // jalur merah kembali ke jalur normal. Tujuan MediaFire dipilih oleh tombol DOWNLOAD di Web Utama.
+            const webMain = new URL(WEB_1_URL);
+            if (mode === "bypass") webMain.searchParams.set("method", "bypass");
+            box.innerHTML = `<h2>Akses berhasil</h2><p class="desc">Membuka Web Utama...</p>`;
+            window.location.assign(webMain.href);
+        }
+    }
+</script>
+</body>
+</html>
+
