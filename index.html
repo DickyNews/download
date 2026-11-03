@@ -292,14 +292,14 @@
                         panel.querySelector("#direct").onclick=()=>{location.href=destination;};
                         return;
                     }
-                    const fallbackTasks=[["Subscribe & Hit Bell YouTube","https://www.youtube.com/@dickynewsofficial"],["Like & Comment Video","https://youtu.be/g7ekOGN3MhM"],["Follow Instagram","https://www.instagram.com/dickynews"],["Follow TikTok","https://www.tiktok.com/@dickynewsofficial"],["Follow Facebook","https://www.facebook.com/dickynews45"]];
+                    const fallbackTasks=[["Subscribe YouTube Utama","https://youtube.com/@dickynews"],["Subscribe YouTube Kedua","https://www.youtube.com/@GODickyNews"],["Follow Instagram","https://www.instagram.com/dickynews"],["Follow TikTok","https://www.tiktok.com/@dickynewsofficial"],["Follow Facebook","https://www.facebook.com/dickynews45"]];
                     let tasks=fallbackTasks;
                     try {
                         const configResponse=await fetch("https://dickynews-publisher.alinkdicky45.workers.dev/social-config",{cache:"no-store"});
                         const configData=await configResponse.json();
                         const c=configData&&configData.success&&configData.config?configData.config:null;
                         if(c){
-                            const configured=[[c.taskYtName||"Subscribe & Hit Bell YouTube",c.taskYtLink],[c.taskVideoName||"Like & Comment Video",c.taskVideoLink],["Follow Instagram",c.socialInstagram],["Follow TikTok",c.socialTiktok],["Follow Facebook",c.socialFacebook]];
+                            const configured=[["Subscribe YouTube Utama",c.socialMainYt],["Subscribe YouTube Kedua",c.socialSecondYt],["Follow Instagram",c.socialInstagram],["Follow TikTok",c.socialTiktok],["Follow Facebook",c.socialFacebook]];
                             const valid=configured.filter((item)=>{try{return typeof item[0]==="string"&&item[0].trim()&&new URL(item[1]).protocol==="https:"}catch(_){return false}});
                             if(valid.length===5)tasks=valid;
                         }
